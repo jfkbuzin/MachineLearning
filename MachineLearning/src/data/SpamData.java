@@ -1,0 +1,64 @@
+package data;
+
+public class SpamData {
+
+	double word_freq_make;	
+	double word_freq_address;	
+	double word_freq_all;	
+	double word_freq_3d;	
+	double word_freq_our;	
+	double word_freq_over;	
+	double word_freq_remove;	
+	double word_freq_internet;	
+	double word_freq_order;	
+	double word_freq_mail;	
+	double word_freq_receive;	
+	double word_freq_will;	
+	double word_freq_people;	
+	double word_freq_report;	
+	double word_freq_addresses;	
+	double word_freq_free;	
+	double word_freq_business;	
+	double word_freq_email;	
+	double word_freq_you;	
+	double word_freq_credit;	
+	double word_freq_your;	
+	double word_freq_font;	
+	double word_freq_000;	
+	double word_freq_money;	
+	double word_freq_hp;	
+	double word_freq_hpl;	
+	double word_freq_george;	
+	double word_freq_650;	
+	double word_freq_lab;	
+	double word_freq_labs;	
+	double word_freq_telnet;	
+	double word_freq_857;	
+	double word_freq_data;	
+	double word_freq_415;	
+	double word_freq_85;	
+	double word_freq_technology;	
+	double word_freq_1999;	
+	double word_freq_parts;	
+	double word_freq_pm;	
+	double word_freq_direct;	
+	double word_freq_cs;	
+	double word_freq_meeting;	
+	double word_freq_original;	
+	double word_freq_project;	
+	double word_freq_re;	
+	double word_freq_edu;	
+	double word_freq_table;	
+	double word_freq_conference;	
+	double char_freq_3B;	
+	double char_freq_28;	
+	double char_freq_5B;	
+	double char_freq_21;	
+	double char_freq_24;	
+	double char_freq_23;	
+	double capital_run_length_average;	
+	double capital_run_length_longest;	
+	double capital_run_length_total;	
+	double classType;
+
+}
