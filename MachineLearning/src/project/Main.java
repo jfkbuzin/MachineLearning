@@ -23,7 +23,7 @@ public class Main {
 		
 		DecisionTree decisionTree = new DecisionTree();
 		DecisionTree.selectNodeId(classes, decisionTree, validationData);
-		DecisionTree.addBranch(decisionTree, validationData);
+		DecisionTree.addBranch(decisionTree, validationData)/;
 		DecisionTree.splitExamples(classes, decisionTree, validationData);
 		
 		System.out.println("root attribute selected:" + decisionTree.getNodeId());
