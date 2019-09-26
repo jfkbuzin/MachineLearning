@@ -20,7 +20,7 @@ def compute_data_set_entropy(validation_data):
     example_size = len(validation_data)
     yes_size = 0
     no_size = 0
-
+    print(validation_data)
     for v in validation_data:
         if v.joga == "Sim":
             yes_size += 1
@@ -56,7 +56,7 @@ def compute_sub_set_entropy(validation_data, attribute, example):
     # passar já o valor para calcular a média
 
     if sizes[0] > 0:
-        return (sizes[0] / (1.0 * validation_data.size)) * info
+        return (sizes[0] / (1.0 * len(validation_data))) * info
 
     return 0
 

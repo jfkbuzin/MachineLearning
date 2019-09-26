@@ -1,16 +1,11 @@
 from operator import attrgetter
-
+import ValidationData
 
 class AttributeGain:
 
     def __init__(self, attribute, gain):
         self.attribute = attribute
         self.gain = gain
-
-    def __init__(self):
-        self.attribute = "NONE"
-        self.gain = 0
-
 
 class DecisionTree:
 
@@ -30,35 +25,35 @@ class DecisionTree:
 
 def select_attribute(classes, decision_tree, validation_data):
     gain_list = []
-    data_set_entropy = validation_data.compute_dataset_entropy(validation_data)
+    data_set_entropy = ValidationData.compute_data_set_entropy(validation_data)
     entropy_average = 0
 
     if "Tempo" not in classes:
-        entropy_average = validation_data.compute_subset_entropy(validation_data, "Tempo", "Ensolarado") \
-                          + validation_data.compute_subset_entropy(validation_data, "Tempo", "Nublado") \
-                          + validation_data.compute_subset_entropy(validation_data, "Tempo", "Chuvoso")
+        entropy_average = ValidationData.compute_sub_set_entropy(validation_data, "Tempo", "Ensolarado") \
+                          + ValidationData.compute_sub_set_entropy(validation_data, "Tempo", "Nublado") \
+                          + ValidationData.compute_sub_set_entropy(validation_data, "Tempo", "Chuvoso")
 
-        att = AttributeGain("Tempo", data_set_entropy - entropy_average)
+        att = AttributeGain("Tempo", (data_set_entropy - entropy_average))
         gain_list.append(att)
 
     if "Temperatura" not in classes:
-        entropy_average = validation_data.compute_subset_entropy(validation_data, "Temperatura", "Quente") \
-                          + validation_data.compute_subset_entropy(validation_data, "Temperatura", "Fria") \
-                          + validation_data.compute_subset_entropy(validation_data, "Temperatura", "Amena")
+        entropy_average = ValidationData.compute_sub_set_entropy(validation_data, "Temperatura", "Quente") \
+                          + ValidationData.compute_sub_set_entropy(validation_data, "Temperatura", "Fria") \
+                          + ValidationData.compute_sub_set_entropy(validation_data, "Temperatura", "Amena")
 
         att = AttributeGain("Temperatura", data_set_entropy - entropy_average)
         gain_list.append(att)
 
     if "Umidade" not in classes:
-        entropy_average = validation_data.compute_subset_entropy(validation_data, "Umidade", "Alta") \
-                          + validation_data.compute_subset_entropy(validation_data, "Umidade", "Normal")
+        entropy_average = ValidationData.compute_sub_set_entropy(validation_data, "Umidade", "Alta") \
+                          + ValidationData.compute_sub_set_entropy(validation_data, "Umidade", "Normal")
 
         att = AttributeGain("Umidade", data_set_entropy - entropy_average)
         gain_list.append(att)
 
     if "Ventoso" not in classes:
-        entropy_average = validation_data.compute_subset_entropy(validation_data, "Ventoso", "Falso") \
-                          + validation_data.compute_subset_entropy(validation_data, "Ventoso", "Verdadeiro")
+        entropy_average = ValidationData.compute_sub_set_entropy(validation_data, "Ventoso", "Falso") \
+                          + ValidationData.compute_sub_set_entropy(validation_data, "Ventoso", "Verdadeiro")
 
         att = AttributeGain("Ventoso", data_set_entropy - entropy_average)
         gain_list.append(att)
@@ -120,7 +115,7 @@ def split_examples(classes, decision_tree, validation_data):
             split_examples(classes, branch_decision_tree, new_validation_data)
 
         else:
-            branch_decision_tree.node_id = select_lead_id(decision_tree, path, validation_data)
+            branch_decision_tree.node_id = select_leaf_id(decision_tree, path, validation_data)
 
     if len(branches) > 0:
         decision_tree.branches = branches
@@ -131,7 +126,7 @@ def sub_data(decision_tree, path, validation_data):
 
     if attribute == "Tempo":
 
-        if validation_data.is_pure_partition(validation_data, "Tempo", path):
+        if ValidationData.is_pure_partition(validation_data, "Tempo", path):
             return new_validation_data
         for v in validation_data:
             if v.tempo == path:
@@ -139,7 +134,7 @@ def sub_data(decision_tree, path, validation_data):
 
     if attribute == "Temperatura":
 
-        if validation_data.is_pure_partition(validation_data, "Temperatura", path):
+        if ValidationData.is_pure_partition(validation_data, "Temperatura", path):
             return new_validation_data
         for v in validation_data:
             if v.temperatura == path:
@@ -147,7 +142,7 @@ def sub_data(decision_tree, path, validation_data):
 
     if attribute == "Umidade":
 
-        if validation_data.is_pure_partition(validation_data, "Umidade", path):
+        if ValidationData.is_pure_partition(validation_data, "Umidade", path):
             return new_validation_data
         for v in validation_data:
             if v.umidade == path:
@@ -155,7 +150,7 @@ def sub_data(decision_tree, path, validation_data):
 
     if attribute == "Ventoso":
 
-        if validation_data.is_pure_partition(validation_data, "Ventoso", path):
+        if ValidationData.is_pure_partition(validation_data, "Ventoso", path):
             return new_validation_data
         for v in validation_data:
             if v.ventoso == path:
