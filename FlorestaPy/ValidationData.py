@@ -27,8 +27,8 @@ def compute_data_set_entropy(validation_data):
         else:
             no_size += 1
 
-    d1 = yes_size / 1.0 * example_size
-    d2 = no_size / 1.0 * example_size
+    d1 = yes_size / example_size
+    d2 = no_size / example_size
 
     info = -d1 * Util.log2(d1) - d2 * Util.log2(d2)
 
@@ -44,11 +44,11 @@ def compute_sub_set_entropy(validation_data, attribute, example):
     info = 0
 
     if sizes[1] > 0 and sizes[0] > 0:
-        d1 = sizes[1] / (1.0 * sizes[0])
+        d1 = sizes[1] / sizes[0]
         info = info - d1 * Util.log2(d1)
 
     if sizes[2] > 0 and sizes[0] > 0:
-        d2 = sizes[2] / (1.0 * sizes[0])
+        d2 = sizes[2] / sizes[0]
         info = info - d2 * Util.log2(d2)
 
     print("info: " + str(info))
@@ -56,7 +56,7 @@ def compute_sub_set_entropy(validation_data, attribute, example):
     # passar já o valor para calcular a média
 
     if sizes[0] > 0:
-        return (sizes[0] / (1.0 * len(validation_data))) * info
+        return (sizes[0] / len(validation_data)) * info
 
     return 0
 

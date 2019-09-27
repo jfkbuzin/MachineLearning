@@ -1,11 +1,13 @@
 from operator import attrgetter
 import ValidationData
 
+
 class AttributeGain:
 
     def __init__(self, attribute, gain):
         self.attribute = attribute
         self.gain = gain
+
 
 class DecisionTree:
 
@@ -20,7 +22,6 @@ class DecisionTree:
         self.gain = 0
         self.paths = []
         self.branches = []
-
 
 
 def select_attribute(classes, decision_tree, validation_data):
@@ -76,7 +77,8 @@ def select_attribute(classes, decision_tree, validation_data):
 def select_node_id(classes, decision_tree, validation_data):
     decision_tree.node_id = select_attribute(classes, decision_tree, validation_data)
 
-#2. Estender a árvore, adicionando uma ramo para cada valor do atributo selecionado existente
+
+# 2. Estender a árvore, adicionando uma ramo para cada valor do atributo selecionado existente
 
 def add_branch(decision_tree, validation_data):
     paths = []
@@ -96,10 +98,11 @@ def add_branch(decision_tree, validation_data):
         for v in validation_data:
             paths.append(v.ventoso)
 
+    paths = list(dict.fromkeys(paths))
     decision_tree.paths = paths
 
 
-#3. Dividir os exemplos em partições (uma para cada ramo adicionado), conforme valor do atributo testado
+# 3. Dividir os exemplos em partições (uma para cada ramo adicionado), conforme valor do atributo testado
 
 def split_examples(classes, decision_tree, validation_data):
     branches = []
@@ -110,7 +113,7 @@ def split_examples(classes, decision_tree, validation_data):
 
         if len(new_validation_data) > 0:
             select_node_id(classes, branch_decision_tree, new_validation_data)
-            add_branch(branch_decision_tree,new_validation_data)
+            add_branch(branch_decision_tree, new_validation_data)
             branches.append(branch_decision_tree)
             split_examples(classes, branch_decision_tree, new_validation_data)
 
@@ -119,6 +122,7 @@ def split_examples(classes, decision_tree, validation_data):
 
     if len(branches) > 0:
         decision_tree.branches = branches
+
 
 def sub_data(decision_tree, path, validation_data):
     new_validation_data = []
@@ -183,6 +187,22 @@ def select_leaf_id(decision_tree, path, validation_data):
                 return v.joga
 
 
+# 4. Para cada partição de exemplos resultante, repetir passos 1 a 3
 
-#4. Para cada partição de exemplos resultante, repetir passos 1 a 3
+# print tree
+def print_tree(decision_tree):
 
+    if decision_tree.gain is not None:
+        string = "node id:" + decision_tree.node_id + ", node gain:" + str(decision_tree.gain)
+    else:
+        string = "leaf id:" + decision_tree.node_id
+    i = 0
+
+    for path in decision_tree.paths:
+        i = i + 1
+        string = string + ", path" + str(i) + ":" + path
+
+    print(string)
+
+    for node in decision_tree.branches:
+        print_tree(node)

@@ -13,3 +13,5 @@ if __name__ == '__main__':
     dt.split_examples(classes, decisionTree, validation_data)
 
     print("root attribute selected:" + decisionTree.node_id)
+
+    dt.print_tree(decisionTree)
