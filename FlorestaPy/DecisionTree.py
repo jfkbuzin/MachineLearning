@@ -119,6 +119,7 @@ def split_examples(classes, decision_tree, validation_data):
 
         else:
             branch_decision_tree.node_id = select_leaf_id(decision_tree, path, validation_data)
+            branches.append(branch_decision_tree)
 
     if len(branches) > 0:
         decision_tree.branches = branches
@@ -206,3 +207,44 @@ def print_tree(decision_tree):
 
     for node in decision_tree.branches:
         print_tree(node)
+
+# predizer classe a partir do dado de entrada percorrendo a árvore
+def evaluateData(validation_data, decision_tree):
+    attribute = decision_tree.node_id
+
+    #is leaf
+    if not decision_tree.paths:
+        return decision_tree.node_id
+    else:
+        if attribute == "Tempo":
+            i = 0
+            for path in decision_tree.paths:
+                if validation_data.tempo == path:
+                    return evaluateData(validation_data, decision_tree.branches[i])
+                i = i + 1
+
+        if attribute == "Temperatura":
+            i = 0
+            for path in decision_tree.paths:
+                if validation_data.temperatura == path:
+                    return evaluateData(validation_data, decision_tree.branches[i])
+                i = i + 1
+
+        if attribute == "Umidade":
+            i = 0
+            for path in decision_tree.paths:
+                if validation_data.umidade == path:
+                    return evaluateData(validation_data, decision_tree.branches[i])
+                i = i + 1
+
+        if attribute == "Ventoso":
+            i = 0
+            for path in decision_tree.paths:
+                if validation_data.ventoso == path:
+                    return evaluateData(validation_data, decision_tree.branches[i])
+                i = i + 1
+
+
+
+
+
