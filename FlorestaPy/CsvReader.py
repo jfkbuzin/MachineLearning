@@ -1,4 +1,5 @@
 import csv
+from collections import OrderedDict
 import ValidationData as vd
 
 def read_csv():
@@ -6,16 +7,22 @@ def read_csv():
         validation_data = []
         csvReader = csv.reader(csvDataFile)
         cont = 0
-        attribute_list = []
+        attribute_matrix = []
         for row in csvReader:
             if cont == 0:
-                attribute_list = row
+                for i in range(len(row)):
+                    attribute_matrix.append([row[i], []])
                 cont+=1
                 continue
+            dado_atual = OrderedDict()
 
-            dado_atual = vd.ValidationData(row[0],row[1],row[2],row[3],row[4])
+            for i in range(len(row)):
+                dado_atual[attribute_matrix[i][0]] = row[i]
+                if row[i] not in attribute_matrix[i][1]:
+                    attribute_matrix[i][1].append(row[i])
 
+          #  print(dado_atual)
             validation_data.append(dado_atual)
-        # print(attribute_list)
-        # print(validation_data)
-        return validation_data, attribute_list
+
+       # print(attribute_matrix)
+        return validation_data, attribute_matrix

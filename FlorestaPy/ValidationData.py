@@ -1,28 +1,22 @@
 import Util
 
 
-class ValidationData:
-
-    def __init__(self, tempo, temperatura, umidade, ventoso, joga):
-        self.tempo = tempo
-        self.temperatura = temperatura
-        self.umidade = umidade
-        self.ventoso = ventoso
-        self.joga = joga
-
-    def print_data(self):
-        string = str(self.tempo) + "|" + str(self.temperatura) + "|" + str(self.umidade) + "|" \
-               + str(self.ventoso) + "|" + str(self.joga)
-        print(string)
+def print_data(self):
+    string = str(self.tempo) + "|" + str(self.temperatura) + "|" + str(self.umidade) + "|" \
+           + str(self.ventoso) + "|" + str(self.joga)
+    print(string)
 
 
 def compute_data_set_entropy(validation_data):
     example_size = len(validation_data)
+
+
     yes_size = 0
     no_size = 0
-    print(validation_data)
+
     for v in validation_data:
-        if v.joga == "Sim":
+        atributo_interesse = v[list(v.keys())[-1]]
+        if atributo_interesse == "Sim": # Sim depois tem que ser pego do attribute_matrix
             yes_size += 1
         else:
             no_size += 1
@@ -66,23 +60,15 @@ def set_sizes(validation_data, attribute, example, sizes):
     present_attribute = None
 
     for v in validation_data:
-
-        if attribute == "Tempo":
-            present_attribute = v.tempo
-        if attribute == "Temperatura":
-            present_attribute = v.temperatura
-        if attribute == "Umidade":
-            present_attribute = v.umidade
-        if attribute == "Ventoso":
-            present_attribute = v.ventoso
+        present_attribute = v[attribute]
 
         if present_attribute == example:
             sizes[0] += 1
 
-        if present_attribute == example and v.joga == "Sim":
+        if present_attribute == example and v[list(v.keys())[-1]] == "Sim":
             sizes[1] += 1
 
-        if present_attribute == example and v.joga == "Nao":
+        if present_attribute == example and v[list(v.keys())[-1]] == "Nao":
             sizes[2] += 1
 
 

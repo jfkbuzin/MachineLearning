@@ -2,6 +2,7 @@ import CsvReader
 import DecisionTree as dt
 import ValidationData as vd
 import Bootstrap as bs
+from collections import OrderedDict
 
 def full_tree(validation_data):
     fullDecisionTree = dt.DecisionTree()
@@ -29,6 +30,10 @@ def bootstrap_tree(validation_data):
     training_set = bs.generateTrainingSet(validation_data)
     test_set = bs.generateTestSet(validation_data, training_set)
 
+if __name__ == '__main__':
+    print("oi")
+    validation_data, attribute_matrix = CsvReader.read_csv()
+
     decisionTree = dt.DecisionTree()
 
     classes = []
@@ -36,6 +41,28 @@ def bootstrap_tree(validation_data):
     dt.select_node_id(classes, decisionTree, training_set)
     dt.add_branch(decisionTree, training_set)
     dt.split_examples(classes, decisionTree, training_set)
+
+    dt.select_node_id(classes, decisionTree, validation_data, attribute_matrix)
+    dt.add_branch(decisionTree, validation_data)
+    dt.split_examples(classes, decisionTree, validation_data, attribute_matrix)
+
+    test_data1 = OrderedDict()
+    test_data1["Tempo"] = "Ensolarado"
+    test_data1["Temperatura"] = "Quente"
+    test_data1["Umidade"] = "Normal"
+    test_data1["Ventoso"] = "Verdadeiro"
+    test_data1["Joga"] = "?"
+
+    test_data2 = OrderedDict()
+    test_data2["Tempo"] = "Chuvoso"
+    test_data2["Temperatura"] = "Quente"
+    test_data2["Umidade"] = "Normal"
+    test_data2["Ventoso"] = "Verdadeiro"
+    test_data2["Joga"] = "?"
+
+    # test_data1 = vd.ValidationData("Ensolarado","Quente","Normal","Verdadeiro","?") # resposta é Sim
+    # test_data2 = vd.ValidationData("Chuvoso","Quente","Normal","Verdadeiro","?") # resposta é Nao
+
 
     print("root attribute selected:" + decisionTree.node_id)
 
@@ -46,6 +73,7 @@ def bootstrap_tree(validation_data):
         string = dt.evaluateData(test, decisionTree) #can return none!
         if string is None:
             print("unable to evaluate data, too much repetition on training set")
+
 
         else:
             print("test result" + str(i) + ":" + string)
