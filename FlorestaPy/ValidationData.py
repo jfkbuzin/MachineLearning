@@ -32,7 +32,7 @@ def compute_data_set_entropy(validation_data):
 
     info = -d1 * Util.log2(d1) - d2 * Util.log2(d2)
 
-    print("info: " + str(info))
+    print("data set info: " + str(info))
     return info
 
 
@@ -51,7 +51,7 @@ def compute_sub_set_entropy(validation_data, attribute, example):
         d2 = sizes[2] / sizes[0]
         info = info - d2 * Util.log2(d2)
 
-    print("info: " + str(info))
+    print("subset info: " + str(info))
 
     # passar já o valor para calcular a média
 

@@ -59,20 +59,35 @@ def select_attribute(classes, decision_tree, validation_data):
         att = AttributeGain("Ventoso", data_set_entropy - entropy_average)
         gain_list.append(att)
 
-    if len(gain_list) != 0:
+    if gain_list:
         selected = max(gain_list, key=attrgetter('gain'))
         decision_tree.gain = selected.gain
 
         print("Max Gain: " + str(decision_tree.gain))
 
-        if decision_tree.gain == 0:
-            return "purePartition"
-
         classes.append(selected.attribute)
         return selected.attribute
 
-    return None
+    #raise ValueError("Gain list is null")
+    print("Gain list is null and all classes have been used, setting leaf as the most frequent value")
+    return setAttributeByFrequency(validation_data)
 
+
+def setAttributeByFrequency(validation_data):
+
+    yes_size = 0
+    no_size = 0
+
+    for v in validation_data:
+        if v.joga == "Sim":
+            yes_size += 1
+        else:
+            no_size += 1
+
+    if yes_size >= no_size:
+        return "Sim"
+    else:
+        return "Nao"
 
 def select_node_id(classes, decision_tree, validation_data):
     decision_tree.node_id = select_attribute(classes, decision_tree, validation_data)
@@ -111,7 +126,7 @@ def split_examples(classes, decision_tree, validation_data):
 
         branch_decision_tree = DecisionTree()
 
-        if len(new_validation_data) > 0:
+        if new_validation_data:
             select_node_id(classes, branch_decision_tree, new_validation_data)
             add_branch(branch_decision_tree, new_validation_data)
             branches.append(branch_decision_tree)
@@ -193,10 +208,7 @@ def select_leaf_id(decision_tree, path, validation_data):
 # print tree
 def print_tree(decision_tree):
 
-    if decision_tree.gain is not None:
-        string = "node id:" + decision_tree.node_id + ", node gain:" + str(decision_tree.gain)
-    else:
-        string = "leaf id:" + decision_tree.node_id
+    string = "node id:" + decision_tree.node_id + ", node gain:" + str(decision_tree.gain)
     i = 0
 
     for path in decision_tree.paths:
