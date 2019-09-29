@@ -1,42 +1,48 @@
 import Util
 
 #Nao esta generico. Nao esta adaptado para 3 respostas
-def compute_data_set_entropy(validation_data):
+def compute_data_set_entropy(validation_data, attribute_matrix):
     example_size = len(validation_data)
 
-    yes_size = 0
-    no_size = 0
+    tipos_classificacao = attribute_matrix[-1][1]
+
+    dict_sizes = {}
+    for opcao in tipos_classificacao:
+        dict_sizes[opcao] = 0
 
     for v in validation_data:
         atributo_interesse = v[list(v.keys())[-1]]
-        if atributo_interesse == "Sim": # Sim depois tem que ser pego do attribute_matrix
-            yes_size += 1
-        else:
-            no_size += 1
+        dict_sizes[atributo_interesse] = dict_sizes[atributo_interesse] + 1
 
-    d1 = yes_size / example_size
-    d2 = no_size / example_size
 
-    info = -d1 * Util.log2(d1) - d2 * Util.log2(d2)
+    d_list = []
+    for opcao in tipos_classificacao:
+        d_atual = dict_sizes[opcao] / example_size
+        d_list.append(d_atual)
+
+    info = 0
+    for d_atual in d_list:
+        info += -d_atual * Util.log2(d_atual)
+
+    #info = -d1 * Util.log2(d1) - d2 * Util.log2(d2)
 
     print("data set info: " + str(info))
     return info
 
 
-def compute_sub_set_entropy(validation_data, attribute, example):
+def compute_sub_set_entropy(validation_data, attribute, example, attribute_matrix):
 
-    sizes = [0.0, 0.0, 0.0]
-    set_sizes(validation_data, attribute, example, sizes)
+    tipos_classificacao = attribute_matrix[-1][1]
+
+    sizes = [0.0] + [0.0] * len(tipos_classificacao)
+    set_sizes(validation_data, attribute, example, sizes, tipos_classificacao)
 
     info = 0
 
-    if sizes[1] > 0 and sizes[0] > 0:
-        d1 = sizes[1] / sizes[0]
-        info = info - d1 * Util.log2(d1)
-
-    if sizes[2] > 0 and sizes[0] > 0:
-        d2 = sizes[2] / sizes[0]
-        info = info - d2 * Util.log2(d2)
+    for i in range(1,len(sizes)):
+        if sizes[i] > 0 and sizes[0] > 0:
+            d1 = sizes[i] / sizes[0]
+            info = info - d1 * Util.log2(d1)
 
     print("subset info: " + str(info))
 
@@ -48,7 +54,7 @@ def compute_sub_set_entropy(validation_data, attribute, example):
     return 0
 
 
-def set_sizes(validation_data, attribute, example, sizes):
+def set_sizes(validation_data, attribute, example, sizes, tipos_classificacao):
 
     present_attribute = None
 
@@ -56,21 +62,27 @@ def set_sizes(validation_data, attribute, example, sizes):
         present_attribute = v[attribute]
 
         if present_attribute == example:
-            sizes[0] += 1
+            sizes[0] += 1 # quantidade de registros
+            classificacao_registro_atual = v[list(v.keys())[-1]]
 
-        if present_attribute == example and v[list(v.keys())[-1]] == "Sim":
-            sizes[1] += 1
+            for classificacao_possivel in tipos_classificacao:
+                if classificacao_registro_atual == classificacao_possivel:
+                    posicao = tipos_classificacao.index(classificacao_registro_atual) + 1
+                    sizes[posicao] += 1
 
-        if present_attribute == example and v[list(v.keys())[-1]] == "Nao":
-            sizes[2] += 1
+
+def is_pure_partition(validation_data, attribute, example, attribute_matrix):
+    tipos_classificacao = attribute_matrix[-1][1]
+    sizes = [0.0] + [0.0] * len(tipos_classificacao)
+    set_sizes(validation_data, attribute, example, sizes, tipos_classificacao)
+
+    classes_presentes = 0
+    for i in range(1,len(sizes)):
+        if sizes[i] > 0:
+            classes_presentes += 1
 
 
-def is_pure_partition(validation_data, attribute, example):
-    sizes = [0.0, 0.0, 0.0]
-
-    set_sizes(validation_data, attribute, example, sizes)
-
-    if (sizes[1] > 0 and sizes[2] == 0) or (sizes[1] == 0 and sizes[2] > 0):
+    if classes_presentes == 1:
         return True
     else:
         return False

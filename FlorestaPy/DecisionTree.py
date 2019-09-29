@@ -26,7 +26,7 @@ class DecisionTree:
 
 def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
     gain_list = []
-    data_set_entropy = ValidationData.compute_data_set_entropy(validation_data)
+    data_set_entropy = ValidationData.compute_data_set_entropy(validation_data, attribute_matrix)
 
     for attribute_line in attribute_matrix:
 
@@ -34,7 +34,7 @@ def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
             if attribute_line[0] != "Joga":
                 entropy_average = 0
                 for option in attribute_line[1]:
-                    entropy_average += ValidationData.compute_sub_set_entropy(validation_data,attribute_line[0], option)
+                    entropy_average += ValidationData.compute_sub_set_entropy(validation_data, attribute_line[0], option, attribute_matrix)
                 att = AttributeGain(attribute_line[0], (data_set_entropy - entropy_average))
                 gain_list.append(att)
 
@@ -79,7 +79,8 @@ def add_branch(decision_tree, validation_data):
     attribute = decision_tree.node_id
 
     for v in validation_data:
-        paths.append(v[attribute])
+        if attribute in v.keys(): # para evitar que tente encontrar paths pra folha
+            paths.append(v[attribute])
 
     paths = list(dict.fromkeys(paths))
     decision_tree.paths = paths
@@ -90,7 +91,7 @@ def add_branch(decision_tree, validation_data):
 def split_examples(classes, decision_tree, validation_data, attribute_matrix):
     branches = []
     for path in decision_tree.paths:
-        new_validation_data = sub_data(decision_tree, path, validation_data)
+        new_validation_data = sub_data(decision_tree, path, validation_data, attribute_matrix)
 
         branch_decision_tree = DecisionTree()
 
@@ -108,11 +109,11 @@ def split_examples(classes, decision_tree, validation_data, attribute_matrix):
         decision_tree.branches = branches
 
 
-def sub_data(decision_tree, path, validation_data):
+def sub_data(decision_tree, path, validation_data, attribute_matrix):
     new_validation_data = []
     attribute = decision_tree.node_id
 
-    if ValidationData.is_pure_partition(validation_data,attribute,path):
+    if ValidationData.is_pure_partition(validation_data,attribute,path,attribute_matrix):
         return new_validation_data
     for v in validation_data:
         if v[attribute] == path:
