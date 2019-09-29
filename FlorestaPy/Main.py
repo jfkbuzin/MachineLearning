@@ -56,13 +56,25 @@ if __name__ == '__main__':
         print("tree:" + str(i))
         training_set, test_set = bootstrap_tree(validation_data)
 
+        decisionTree = dt.DecisionTree()
+        classes = []
+
+        dt.select_node_id(classes, decisionTree, training_set, attribute_matrix)
+        dt.add_branch(decisionTree, training_set)
+        dt.split_examples(classes, decisionTree, training_set, attribute_matrix)
+
+        print("root attribute selected:" + decisionTree.node_id)
+
+        dt.print_tree(decisionTree)
+
+        j = 1
         for test in test_set: #test_set:
             string = dt.evaluateData(test, decision_tree) #can return none!
             if string is None:
                 print("unable to evaluate data, too much repetition on training set")
 
             else:
-                print("test result" + str(i) + ":" + string)
+                print("test result" + str(j) + ":" + string)
 
             print(string)
-            i = i + 1
+            j += 1

@@ -27,15 +27,16 @@ class DecisionTree:
 def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
     gain_list = []
     data_set_entropy = ValidationData.compute_data_set_entropy(validation_data)
-    entropy_average = 0
 
     for attribute_line in attribute_matrix:
 
         if attribute_line[0] not in classes:
-            for option in attribute_line[1]:
-                entropy_average += ValidationData.compute_sub_set_entropy(validation_data,attribute_line[0], option)
-            att = AttributeGain(attribute_line[0], (data_set_entropy - entropy_average))
-            gain_list.append(att)
+            if attribute_line[0] != "Joga":
+                entropy_average = 0
+                for option in attribute_line[1]:
+                    entropy_average += ValidationData.compute_sub_set_entropy(validation_data,attribute_line[0], option)
+                att = AttributeGain(attribute_line[0], (data_set_entropy - entropy_average))
+                gain_list.append(att)
 
     if gain_list:
         selected = max(gain_list, key=attrgetter('gain'))
@@ -57,7 +58,7 @@ def setAttributeByFrequency(validation_data):
     no_size = 0
 
     for v in validation_data:
-        if v.joga == "Sim":
+        if v["Joga"] == "Sim":
             yes_size += 1
         else:
             no_size += 1
