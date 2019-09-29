@@ -161,7 +161,30 @@ def evaluateData(validation_data, decision_tree):
                 return evaluateData(validation_data, decision_tree.branches[i])
             i = i + 1
 
+def majority_vote(validation_data, forest):
 
+    case = 1
 
+    for data in validation_data:
+        yes_size = 0
+        no_size = 0
+        for tree in forest:
+            string = evaluateData(data,tree)
+            if string == "Sim":
+                yes_size += 1
+
+            if string == "Nao":
+                no_size += 1
+
+        if yes_size > no_size:
+            print("Case:" + str(case) + " Majority vote is Sim, quantity:" + str(yes_size))
+
+        if no_size > yes_size:
+            print("Case:" + str(case) + " Majority vote is Nao, quantity:" + str(no_size))
+
+        if no_size == yes_size:
+            print("Case:" + str(case) + " Majority vote is inconclusive")
+
+        case += 1
 
 

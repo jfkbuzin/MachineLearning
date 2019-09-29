@@ -50,8 +50,10 @@ if __name__ == '__main__':
 
     decision_tree = full_tree(validation_data, attribute_matrix)
 
-    forest = 3
+    forest = 5
     fixedSeed = 0
+    list_tuples = []
+    forests = []
 
     for i in range(1,forest+1):
         print("tree:" + str(i))
@@ -68,15 +70,20 @@ if __name__ == '__main__':
         print("root attribute selected:" + decisionTree.node_id)
 
         dt.print_tree(decisionTree)
+        forests.append(decisionTree)
 
         j = 1
         for test in test_set: #test_set:
             string = dt.evaluateData(test, decision_tree) #can return none!
             if string is None:
                 print("unable to evaluate data, too much repetition on training set")
-
+                tup = (test["Joga"],"failed")
             else:
                 print("test result" + str(j) + ":" + string)
+                tup = (test["Joga"],string)
 
             print(string)
             j += 1
+            list_tuples.append(tup)
+
+    dt.majority_vote(validation_data,forests)
