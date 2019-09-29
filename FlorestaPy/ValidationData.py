@@ -1,15 +1,8 @@
 import Util
 
-
-def print_data(self):
-    string = str(self.tempo) + "|" + str(self.temperatura) + "|" + str(self.umidade) + "|" \
-           + str(self.ventoso) + "|" + str(self.joga)
-    print(string)
-
-
+#Nao esta generico. Nao esta adaptado para 3 respostas
 def compute_data_set_entropy(validation_data):
     example_size = len(validation_data)
-
 
     yes_size = 0
     no_size = 0

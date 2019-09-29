@@ -1,5 +1,6 @@
 import ValidationData
 import random
+from collections import OrderedDict
 
 def bootstrap(validation_data, training_set, test_set):
     training_set = generateTraniningSet(validation_data)
@@ -16,4 +17,9 @@ def generateTrainingSet(validation_data):
 
 #gerar lista com dados que não se encontram no conjunto de treinamento
 def generateTestSet(validation_data, training_set):
-    return list(set(validation_data) - set(training_set))
+
+    test_set = []
+    for reg in validation_data:
+        if reg not in training_set:
+            test_set.append(reg)
+    return test_set

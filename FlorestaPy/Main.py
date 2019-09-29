@@ -4,47 +4,18 @@ import ValidationData as vd
 import Bootstrap as bs
 from collections import OrderedDict
 
-def full_tree(validation_data):
+def full_tree(validation_data, attribute_matrix):
     fullDecisionTree = dt.DecisionTree()
 
     classes = []
 
-    dt.select_node_id(classes, fullDecisionTree, validation_data)
+    dt.select_node_id(classes, fullDecisionTree, validation_data, attribute_matrix)
     dt.add_branch(fullDecisionTree, validation_data)
-    dt.split_examples(classes, fullDecisionTree, validation_data)
+    dt.split_examples(classes, fullDecisionTree, validation_data, attribute_matrix)
 
     print("root attribute selected:" + fullDecisionTree.node_id)
 
     dt.print_tree(fullDecisionTree)
-
-    test_data1 = vd.ValidationData("Ensolarado", "Quente", "Normal", "Verdadeiro", "?")  # resposta é Sim
-    test_data2 = vd.ValidationData("Chuvoso", "Quente", "Normal", "Verdadeiro", "?")  # resposta é Nao
-
-    string1 = dt.evaluateData(test_data1, fullDecisionTree)
-    print("test1:" + string1)
-
-    string2 = dt.evaluateData(test_data2, fullDecisionTree)
-    print("test2:" + string2)
-
-def bootstrap_tree(validation_data):
-    training_set = bs.generateTrainingSet(validation_data)
-    test_set = bs.generateTestSet(validation_data, training_set)
-
-if __name__ == '__main__':
-    print("oi")
-    validation_data, attribute_matrix = CsvReader.read_csv()
-
-    decisionTree = dt.DecisionTree()
-
-    classes = []
-
-    dt.select_node_id(classes, decisionTree, training_set)
-    dt.add_branch(decisionTree, training_set)
-    dt.split_examples(classes, decisionTree, training_set)
-
-    dt.select_node_id(classes, decisionTree, validation_data, attribute_matrix)
-    dt.add_branch(decisionTree, validation_data)
-    dt.split_examples(classes, decisionTree, validation_data, attribute_matrix)
 
     test_data1 = OrderedDict()
     test_data1["Tempo"] = "Ensolarado"
@@ -60,37 +31,38 @@ if __name__ == '__main__':
     test_data2["Ventoso"] = "Verdadeiro"
     test_data2["Joga"] = "?"
 
-    # test_data1 = vd.ValidationData("Ensolarado","Quente","Normal","Verdadeiro","?") # resposta é Sim
-    # test_data2 = vd.ValidationData("Chuvoso","Quente","Normal","Verdadeiro","?") # resposta é Nao
+    string1 = dt.evaluateData(test_data1, fullDecisionTree)
+    print("test1:" + string1)
 
+    string2 = dt.evaluateData(test_data2, fullDecisionTree)
+    print("test2:" + string2)
 
-    print("root attribute selected:" + decisionTree.node_id)
+    return fullDecisionTree
 
-    dt.print_tree(decisionTree)
-
-    i = 1;
-    for test in test_set:
-        string = dt.evaluateData(test, decisionTree) #can return none!
-        if string is None:
-            print("unable to evaluate data, too much repetition on training set")
-
-
-        else:
-            print("test result" + str(i) + ":" + string)
-
-        string = str(test.tempo) + "|" + str(test.temperatura) + "|" + str(test.umidade) + "|" \
-                 + str(test.ventoso) + "|" + str(test.joga)
-        print(string)
-        i = i + 1
+def bootstrap_tree(validation_data):
+    training_set = bs.generateTrainingSet(validation_data)
+    test_set = bs.generateTestSet(validation_data, training_set)
+    return  training_set, test_set
 
 if __name__ == '__main__':
-    validation_data, attribute_list = CsvReader.read_csv()
+    print("oi")
+    validation_data, attribute_matrix = CsvReader.read_csv()
 
-    full_tree(validation_data)
+    decision_tree = full_tree(validation_data, attribute_matrix)
 
     forest = 50
 
     for i in range(1,forest+1):
         print("tree:" + str(i))
-        bootstrap_tree(validation_data)
+        training_set, test_set = bootstrap_tree(validation_data)
 
+        for test in test_set: #test_set:
+            string = dt.evaluateData(test, decision_tree) #can return none!
+            if string is None:
+                print("unable to evaluate data, too much repetition on training set")
+
+            else:
+                print("test result" + str(i) + ":" + string)
+
+            print(string)
+            i = i + 1
