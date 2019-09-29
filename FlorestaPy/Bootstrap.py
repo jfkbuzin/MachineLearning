@@ -9,11 +9,13 @@ def bootstrap(validation_data, training_set, test_set):
     test_set = generateTestSet(validation_data, training_set)
 
 #gerar conjunto de treinamento com reposição
-def generateTrainingSet(validation_data):
+def generateTrainingSet(validation_data,fixedSeed):
     training_set = []
 
     for i in validation_data:
+        random.seed(fixedSeed)
         training_set.append(random.choice(validation_data))
+        fixedSeed += 1
 
     return training_set
 

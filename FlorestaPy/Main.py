@@ -39,8 +39,8 @@ def full_tree(validation_data, attribute_matrix):
 
     return fullDecisionTree
 
-def bootstrap_tree(validation_data):
-    training_set = bs.generateTrainingSet(validation_data)
+def bootstrap_tree(validation_data,fixedSeed):
+    training_set = bs.generateTrainingSet(validation_data,fixedSeed)
     test_set = bs.generateTestSet(validation_data, training_set)
     return  training_set, test_set
 
@@ -50,11 +50,13 @@ if __name__ == '__main__':
 
     decision_tree = full_tree(validation_data, attribute_matrix)
 
-    forest = 50
+    forest = 3
+    fixedSeed = 0
 
     for i in range(1,forest+1):
         print("tree:" + str(i))
-        training_set, test_set = bootstrap_tree(validation_data)
+        training_set, test_set = bootstrap_tree(validation_data,fixedSeed)
+        fixedSeed += len(validation_data)
 
         decisionTree = dt.DecisionTree()
         classes = []
