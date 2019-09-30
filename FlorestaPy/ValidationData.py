@@ -1,4 +1,6 @@
 import Util
+import numpy as np
+import random
 
 #Nao esta generico. Nao esta adaptado para 3 respostas
 def compute_data_set_entropy(validation_data, attribute_matrix):
@@ -86,3 +88,25 @@ def is_pure_partition(validation_data, attribute, example, attribute_matrix):
         return True
     else:
         return False
+
+
+def select_m_attributes(attribute_matrix,seed):
+
+    m_attribute_matrix = []
+    m_attributes = []
+    m = Util.get_m(attribute_matrix)
+
+    while m != 0:
+        random.seed(seed)
+        seed += 1
+        x = random.randint(0, len(attribute_matrix) - 2)
+        if x in m_attributes:
+            continue
+        else:
+            m_attributes.append(x)
+            m_attribute_matrix.append(attribute_matrix[x])
+            m -= 1
+
+    #must add joga in the end
+    m_attribute_matrix.append(attribute_matrix[len(attribute_matrix) - 1])
+    return m_attribute_matrix

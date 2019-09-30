@@ -3,6 +3,10 @@ import math
 def log2(x):
     return math.log(x) / math.log(2)
 
+def get_m(attribute_matrix):
+    size = len(attribute_matrix) - 1
+    return math.sqrt(size)
+
 def prec(vp, fp):
     return  vp / (vp + fp)
 

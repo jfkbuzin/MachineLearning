@@ -24,5 +24,12 @@ def read_csv():
           #  print(dado_atual)
             validation_data.append(dado_atual)
 
+
+        for attribute in attribute_matrix:
+            try:
+                x = float(attribute[1][0])
+                attribute[1] = ["NUMERICO"]
+            except ValueError:
+                continue
        # print(attribute_matrix)
         return validation_data, attribute_matrix

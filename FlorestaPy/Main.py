@@ -54,6 +54,7 @@ if __name__ == '__main__':
     fixedSeed = 0
     list_tuples = []
     forests = []
+    seed = 7
 
     for i in range(1,forest+1):
         print("tree:" + str(i))
@@ -63,9 +64,13 @@ if __name__ == '__main__':
         decisionTree = dt.DecisionTree()
         classes = []
 
-        dt.select_node_id(classes, decisionTree, training_set, attribute_matrix)
+        # m attributes are used
+        reduced_matrix = vd.select_m_attributes(attribute_matrix, seed)
+        seed += len(validation_data)
+
+        dt.select_node_id(classes, decisionTree, training_set, reduced_matrix)
         dt.add_branch(decisionTree, training_set)
-        dt.split_examples(classes, decisionTree, training_set, attribute_matrix)
+        dt.split_examples(classes, decisionTree, training_set, reduced_matrix)
 
         print("root attribute selected:" + decisionTree.node_id)
 
