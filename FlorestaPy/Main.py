@@ -2,6 +2,7 @@ import CsvReader
 import DecisionTree as dt
 import ValidationData as vd
 import Bootstrap as bs
+import Util as ut
 from collections import OrderedDict
 
 def full_tree(validation_data, attribute_matrix):
@@ -90,5 +91,10 @@ if __name__ == '__main__':
             print(string)
             j += 1
             list_tuples.append(tup)
+        
+        precision, recall, f1 = ut.performance_binary(list_tuples, ['Sim', 'Nao'])
+        print("precision:", str(precision))
+        print("recall:", str(recall))
+        print("f1:", str(f1))
 
     dt.majority_vote(validation_data,forests)
