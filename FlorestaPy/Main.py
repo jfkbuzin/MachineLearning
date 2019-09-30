@@ -48,8 +48,10 @@ def bootstrap_tree(validation_data,fixedSeed):
 if __name__ == '__main__':
     print("oi")
     validation_data, attribute_matrix = CsvReader.read_csv()
-
     decision_tree = full_tree(validation_data, attribute_matrix)
+
+    vertebra_data, attribute_matrix_vertebra = CsvReader.read_csv_numeral()
+    #decision_tree = full_tree(vertebra_data, attribute_matrix_vertebra)
 
     forest = 5
     fixedSeed = 0
@@ -97,4 +99,4 @@ if __name__ == '__main__':
         print("recall:", str(recall))
         print("f1:", str(f1))
 
-    dt.majority_vote(validation_data,forests)
+    dt.majority_vote(validation_data,forests,attribute_matrix)
