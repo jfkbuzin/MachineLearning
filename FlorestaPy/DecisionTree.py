@@ -49,11 +49,11 @@ def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
 
     #raise ValueError("Gain list is null")
     print("Gain list is null and all classes have been used, setting leaf as the most frequent value")
-    return setAttributeByFrequency(validation_data)
+    return setAttributeByFrequency(validation_data,attribute_matrix)
 
 
-def setAttributeByFrequency(validation_data):
-
+def setAttributeByFrequency(validation_data, attribute_matrix):
+    """
     yes_size = 0
     no_size = 0
 
@@ -66,7 +66,30 @@ def setAttributeByFrequency(validation_data):
     if yes_size >= no_size:
         return "Sim"
     else:
-        return "Nao"
+        return "Nao" """
+
+    atributo_objetivo = attribute_matrix[-1][0]
+
+    opcoes_objetivo = attribute_matrix[-1][1]
+
+    dict_sizes = {}
+    for opcao in opcoes_objetivo:
+        dict_sizes[opcao] = 0
+
+    for v in validation_data:
+        for opcao_atual in opcoes_objetivo:
+            if v[atributo_objetivo] == opcao_atual:
+                dict_sizes[opcao_atual] += 1
+
+    str_maximo = ""
+    valor_maximo = 0
+
+    for opcao in opcoes_objetivo:
+        if dict_sizes[opcao] >= valor_maximo:
+            str_maximo = opcao
+            valor_maximo = dict_sizes[opcao]
+
+    return str_maximo
 
 def select_node_id(classes, decision_tree, validation_data, attribute_matrix):
     decision_tree.node_id = select_attribute(classes, decision_tree, validation_data, attribute_matrix)
@@ -161,8 +184,9 @@ def evaluateData(validation_data, decision_tree):
                 return evaluateData(validation_data, decision_tree.branches[i])
             i = i + 1
 
-def majority_vote(validation_data, forest):
+def majority_vote(validation_data, forest,attribute_matrix):
 
+    """
     case = 1
 
     for data in validation_data:
@@ -185,6 +209,44 @@ def majority_vote(validation_data, forest):
         if no_size == yes_size:
             print("Case:" + str(case) + " Majority vote is inconclusive")
 
+        case += 1 """
+
+    case = 1
+
+    atributo_objetivo = attribute_matrix[-1][0]
+    opcoes_objetivo = attribute_matrix[-1][1]
+
+    for data in validation_data:
+        dict_sizes = {}
+        for opcao in opcoes_objetivo:
+            dict_sizes[opcao] = 0
+
+        for tree in forest:
+            string = evaluateData(data, tree)
+
+            for opcao_atual in opcoes_objetivo:
+                if string == opcao_atual:
+                    dict_sizes[opcao_atual] += 1
+
+            str_maximo = ""
+            valor_maximo = 0
+
+            for opcao in opcoes_objetivo:
+                if dict_sizes[opcao] >= valor_maximo:
+                    str_maximo = opcao
+                    valor_maximo = dict_sizes[opcao]
+
+            conta_empate_maximo = 0
+            for opcao in opcoes_objetivo:
+                if dict_sizes[opcao] == valor_maximo:
+                    conta_empate_maximo += 1
+
+        if conta_empate_maximo != 1:
+            print("Case:" + str(case) + " Majority vote is inconclusive")
+        else:
+            print("Case:" + str(case) + " Majority vote is "+ str_maximo +", quantity:" + str(valor_maximo))
+
         case += 1
+
 
 
