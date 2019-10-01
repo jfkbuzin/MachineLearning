@@ -29,9 +29,8 @@ def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
     data_set_entropy = ValidationData.compute_data_set_entropy(validation_data, attribute_matrix)
 
     for attribute_line in attribute_matrix:
-
-        if attribute_line[0] not in classes:
-            if attribute_line[0] != "Joga":
+        if attribute_matrix.index(attribute_line) != len(attribute_matrix) - 1:
+            if attribute_line[0] not in classes:
                 entropy_average = 0
                 for option in attribute_line[1]:
                     entropy_average += ValidationData.compute_sub_set_entropy(validation_data, attribute_line[0], option, attribute_matrix)
@@ -96,14 +95,23 @@ def select_node_id(classes, decision_tree, validation_data, attribute_matrix):
 # 2. Estender a árvore, adicionando uma ramo para cada valor do atributo selecionado existente
 
 
-def add_branch(decision_tree, validation_data):
+def add_branch(decision_tree, validation_data,attribute_matrix):
     paths = []
 
     attribute = decision_tree.node_id
 
     for v in validation_data:
         if attribute in v.keys(): # para evitar que tente encontrar paths pra folha
-            paths.append(v[attribute])
+            try:
+                x = float(v[attribute])
+                while not paths:
+                    for att in attribute_matrix:
+                        if attribute_matrix.index(att) != len(attribute_matrix) - 1:
+                            if att[0] == attribute:
+                                paths.append(att[1][0])
+                                paths.append(att[1][1])
+            except ValueError:
+                paths.append(v[attribute])
 
     paths = list(dict.fromkeys(paths))
     decision_tree.paths = paths
@@ -120,7 +128,7 @@ def split_examples(classes, decision_tree, validation_data, attribute_matrix):
 
         if len(new_validation_data) > 0:
             select_node_id(classes, branch_decision_tree, new_validation_data, attribute_matrix)
-            add_branch(branch_decision_tree, new_validation_data)
+            add_branch(branch_decision_tree, new_validation_data,attribute_matrix)
             branches.append(branch_decision_tree)
             split_examples(classes, branch_decision_tree, new_validation_data,attribute_matrix)
 
@@ -139,8 +147,22 @@ def sub_data(decision_tree, path, validation_data, attribute_matrix):
     if ValidationData.is_pure_partition(validation_data,attribute,path,attribute_matrix):
         return new_validation_data
     for v in validation_data:
-        if v[attribute] == path:
-            new_validation_data.append(v)
+        try:
+            x = float(v[attribute])
+            if "<" in path:
+                splitString = path.split('< ')
+                average = float(splitString[1])
+                if x < average:
+                    new_validation_data.append(v)
+
+            if ">" in path:
+                splitString = path.split('> ')
+                average = float(splitString[1])
+                if x > average:
+                    new_validation_data.append(v)
+        except ValueError:
+            if v[attribute] == path:
+                new_validation_data.append(v)
 
     return new_validation_data
 
@@ -149,8 +171,22 @@ def select_leaf_id(decision_tree, path, validation_data):
     attribute = decision_tree.node_id
 
     for v in validation_data:
-        if v[attribute] == path:
-            return v[list(v.keys())[-1]]
+        try:
+            x = float(v[attribute])
+            if "<" in path:
+                splitString = path.split('< ')
+                average = float(splitString[1])
+                if x < average:
+                    return v[list(v.keys())[-1]]
+
+            if ">" in path:
+                splitString = path.split('> ')
+                average = float(splitString[1])
+                if x > average:
+                    return v[list(v.keys())[-1]]
+        except ValueError:
+            if v[attribute] == path:
+                return v[list(v.keys())[-1]]
 
 # 4. Para cada partição de exemplos resultante, repetir passos 1 a 3
 
@@ -180,8 +216,25 @@ def evaluateData(validation_data, decision_tree):
     else:
         i = 0
         for path in decision_tree.paths:
-            if validation_data[attribute] == path:
-                return evaluateData(validation_data, decision_tree.branches[i])
+
+            try:
+                x = float(validation_data[attribute])
+                if "<" in path:
+                    splitString = path.split('< ')
+                    average = float(splitString[1])
+                    if x < average:
+                        return evaluateData(validation_data, decision_tree.branches[i])
+
+                if ">" in path:
+                    splitString = path.split('> ')
+                    average = float(splitString[1])
+                    if x > average:
+                        return evaluateData(validation_data, decision_tree.branches[i])
+
+            except ValueError:
+                if validation_data[attribute] == path:
+                    return evaluateData(validation_data, decision_tree.branches[i])
+
             i = i + 1
 
 def majority_vote(validation_data, forest,attribute_matrix):

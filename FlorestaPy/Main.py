@@ -11,13 +11,14 @@ def full_tree(validation_data, attribute_matrix):
     classes = []
 
     dt.select_node_id(classes, fullDecisionTree, validation_data, attribute_matrix)
-    dt.add_branch(fullDecisionTree, validation_data)
+    dt.add_branch(fullDecisionTree, validation_data, attribute_matrix)
     dt.split_examples(classes, fullDecisionTree, validation_data, attribute_matrix)
 
     print("root attribute selected:" + fullDecisionTree.node_id)
 
     dt.print_tree(fullDecisionTree)
 
+    '''
     test_data1 = OrderedDict()
     test_data1["Tempo"] = "Ensolarado"
     test_data1["Temperatura"] = "Quente"
@@ -36,7 +37,7 @@ def full_tree(validation_data, attribute_matrix):
     print("test1:" + string1)
 
     string2 = dt.evaluateData(test_data2, fullDecisionTree)
-    print("test2:" + string2)
+    print("test2:" + string2)'''
 
     return fullDecisionTree
 
@@ -51,7 +52,7 @@ if __name__ == '__main__':
     decision_tree = full_tree(validation_data, attribute_matrix)
 
     vertebra_data, attribute_matrix_vertebra = CsvReader.read_csv_numeral()
-    #decision_tree = full_tree(vertebra_data, attribute_matrix_vertebra)
+    vertebra_decision_tree = full_tree(vertebra_data, attribute_matrix_vertebra)
 
     forest = 5
     fixedSeed = 0
@@ -72,7 +73,7 @@ if __name__ == '__main__':
         seed += len(validation_data)
 
         dt.select_node_id(classes, decisionTree, training_set, reduced_matrix)
-        dt.add_branch(decisionTree, training_set)
+        dt.add_branch(decisionTree, training_set,reduced_matrix)
         dt.split_examples(classes, decisionTree, training_set, reduced_matrix)
 
         print("root attribute selected:" + decisionTree.node_id)

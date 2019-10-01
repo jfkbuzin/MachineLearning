@@ -19,8 +19,9 @@ def compute_data_set_entropy(validation_data, attribute_matrix):
 
     d_list = []
     for opcao in tipos_classificacao:
-        d_atual = dict_sizes[opcao] / example_size
-        d_list.append(d_atual)
+        if dict_sizes[opcao] > 0:
+            d_atual = dict_sizes[opcao] / example_size
+            d_list.append(d_atual)
 
     info = 0
     for d_atual in d_list:
@@ -63,15 +64,35 @@ def set_sizes(validation_data, attribute, example, sizes, tipos_classificacao):
     for v in validation_data:
         present_attribute = v[attribute]
 
-        if present_attribute == example:
-            sizes[0] += 1 # quantidade de registros
-            classificacao_registro_atual = v[list(v.keys())[-1]]
+        try:
+            x = float(present_attribute)
+            if "<" in example:
+                splitString = example.split('< ')
+                average = float(splitString[1])
+                if x < average:
+                    sizes[0] += 1  # quantidade de registros
+                    classificacao_registro_atual = v[list(v.keys())[-1]]
+                    set_secondary_sizes(tipos_classificacao, classificacao_registro_atual, sizes)
 
-            for classificacao_possivel in tipos_classificacao:
-                if classificacao_registro_atual == classificacao_possivel:
-                    posicao = tipos_classificacao.index(classificacao_registro_atual) + 1
-                    sizes[posicao] += 1
+            if ">" in example:
+                splitString = example.split('> ')
+                average = float(splitString[1])
+                if x > average:
+                    sizes[0] += 1  # quantidade de registros
+                    classificacao_registro_atual = v[list(v.keys())[-1]]
+                    set_secondary_sizes(tipos_classificacao, classificacao_registro_atual, sizes)
 
+        except ValueError:
+            if present_attribute == example:
+                sizes[0] += 1 # quantidade de registros
+                classificacao_registro_atual = v[list(v.keys())[-1]]
+                set_secondary_sizes(tipos_classificacao, classificacao_registro_atual, sizes)
+
+def set_secondary_sizes(tipos_classificacao, classificacao_registro_atual, sizes):
+    for classificacao_possivel in tipos_classificacao:
+        if classificacao_registro_atual == classificacao_possivel:
+            posicao = tipos_classificacao.index(classificacao_registro_atual) + 1
+            sizes[posicao] += 1
 
 def is_pure_partition(validation_data, attribute, example, attribute_matrix):
     tipos_classificacao = attribute_matrix[-1][1]

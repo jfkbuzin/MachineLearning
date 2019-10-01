@@ -59,9 +59,7 @@ def read_csv_numeral():
         #calcular media para cada coluna
 
         for attribute in attribute_matrix:
-            indx = attribute_matrix.index(attribute)
-            leng = len(attribute_matrix) - 1
-            if indx != leng:
+            if attribute_matrix.index(attribute) != len(attribute_matrix) - 1:
                 try:
                     x = float(attribute[1][0])
                     sum = 0
