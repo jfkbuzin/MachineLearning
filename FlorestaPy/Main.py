@@ -18,27 +18,6 @@ def full_tree(validation_data, attribute_matrix):
 
     dt.print_tree(fullDecisionTree)
 
-    '''
-    test_data1 = OrderedDict()
-    test_data1["Tempo"] = "Ensolarado"
-    test_data1["Temperatura"] = "Quente"
-    test_data1["Umidade"] = "Normal"
-    test_data1["Ventoso"] = "Verdadeiro"
-    test_data1["Joga"] = "?"
-
-    test_data2 = OrderedDict()
-    test_data2["Tempo"] = "Chuvoso"
-    test_data2["Temperatura"] = "Quente"
-    test_data2["Umidade"] = "Normal"
-    test_data2["Ventoso"] = "Verdadeiro"
-    test_data2["Joga"] = "?"
-
-    string1 = dt.evaluateData(test_data1, fullDecisionTree)
-    print("test1:" + string1)
-
-    string2 = dt.evaluateData(test_data2, fullDecisionTree)
-    print("test2:" + string2)'''
-
     return fullDecisionTree
 
 def bootstrap_tree(validation_data,fixedSeed):
@@ -81,23 +60,25 @@ if __name__ == '__main__':
         dt.print_tree(decisionTree)
         forests.append(decisionTree)
 
+        atributo_objetivo = attribute_matrix[-1][0]
+        opcoes_atributo_objetivo = attribute_matrix[-1][1]
+
         j = 1
         for test in test_set: #test_set:
             string = dt.evaluateData(test, decision_tree) #can return none!
             if string is None:
                 print("unable to evaluate data, too much repetition on training set")
-                tup = (test["Joga"],"failed")
+                tup = (test[atributo_objetivo], "failed")
             else:
-                print("test result" + str(j) + ":" + string)
-                tup = (test["Joga"],string)
+                print("test #" + str(j) + " result: " + "(Verdadeiro / Classificado) (" + test[atributo_objetivo] + " / " + string + ")")
+                tup = (test[atributo_objetivo], string)
 
-            print(string)
             j += 1
             list_tuples.append(tup)
         
-        precision, recall, f1 = ut.performance_binary(list_tuples, ['Sim', 'Nao'])
+        precision, recall, f1 = ut.performance_binary(list_tuples, opcoes_atributo_objetivo)
         print("precision:", str(precision))
         print("recall:", str(recall))
         print("f1:", str(f1))
 
-    dt.majority_vote(validation_data,forests,attribute_matrix)
+    #dt.majority_vote(validation_data,forests,attribute_matrix)
