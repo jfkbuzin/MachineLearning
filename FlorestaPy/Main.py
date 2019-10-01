@@ -27,7 +27,13 @@ def bootstrap_tree(validation_data,fixedSeed):
 
 if __name__ == '__main__':
     print("oi")
-    validation_data, attribute_matrix = CsvReader.read_csv()
+
+    #arquivo = "dataset_31_credit-g.csv"
+    #arquivo = "dataset_191_wine-1.csv"
+    #arquivo = "vertebra.csv"
+    arquivo = "dadosBenchmark_validacaoAlgoritmoAD.csv"
+
+    validation_data, attribute_matrix = CsvReader.read_csv(arquivo)
     decision_tree = full_tree(validation_data, attribute_matrix)
 
     vertebra_data, attribute_matrix_vertebra = CsvReader.read_csv_numeral()
@@ -60,8 +66,8 @@ if __name__ == '__main__':
         dt.print_tree(decisionTree)
         forests.append(decisionTree)
 
-        atributo_objetivo = attribute_matrix[-1][0]
-        opcoes_atributo_objetivo = attribute_matrix[-1][1]
+        opcoes_atributo_objetivo = ut.retorna_opcoes_classe(attribute_matrix)
+        atributo_objetivo = "Class"
 
         j = 1
         for test in test_set: #test_set:
@@ -81,4 +87,4 @@ if __name__ == '__main__':
         print("recall:", str(recall))
         print("f1:", str(f1))
 
-    #dt.majority_vote(validation_data,forests,attribute_matrix)
+    dt.majority_vote(validation_data,forests,attribute_matrix)

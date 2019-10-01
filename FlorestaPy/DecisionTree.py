@@ -1,5 +1,6 @@
 from operator import attrgetter
 import ValidationData
+import Util
 
 
 class AttributeGain:
@@ -67,9 +68,8 @@ def setAttributeByFrequency(validation_data, attribute_matrix):
     else:
         return "Nao" """
 
-    atributo_objetivo = attribute_matrix[-1][0]
-
-    opcoes_objetivo = attribute_matrix[-1][1]
+    atributo_objetivo = "Class"
+    opcoes_objetivo = Util.retorna_opcoes_classe(attribute_matrix)
 
     dict_sizes = {}
     for opcao in opcoes_objetivo:
@@ -108,6 +108,7 @@ def add_branch(decision_tree, validation_data,attribute_matrix):
                     for att in attribute_matrix:
                         if attribute_matrix.index(att) != len(attribute_matrix) - 1:
                             if att[0] == attribute:
+                                print(att)
                                 paths.append(att[1][0])
                                 paths.append(att[1][1])
             except ValueError:
@@ -177,16 +178,16 @@ def select_leaf_id(decision_tree, path, validation_data):
                 splitString = path.split('< ')
                 average = float(splitString[1])
                 if x < average:
-                    return v[list(v.keys())[-1]]
+                    return v["Class"]
 
             if ">" in path:
                 splitString = path.split('> ')
                 average = float(splitString[1])
                 if x > average:
-                    return v[list(v.keys())[-1]]
+                    return v["Class"]
         except ValueError:
             if v[attribute] == path:
-                return v[list(v.keys())[-1]]
+                return v["Class"]
 
 # 4. Para cada partição de exemplos resultante, repetir passos 1 a 3
 
@@ -266,8 +267,7 @@ def majority_vote(validation_data, forest,attribute_matrix):
 
     case = 1
 
-    atributo_objetivo = attribute_matrix[-1][0]
-    opcoes_objetivo = attribute_matrix[-1][1]
+    opcoes_objetivo = Util.retorna_opcoes_classe(attribute_matrix)
 
     for data in validation_data:
         dict_sizes = {}

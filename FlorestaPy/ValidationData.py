@@ -6,6 +6,8 @@ import random
 def compute_data_set_entropy(validation_data, attribute_matrix):
     example_size = len(validation_data)
 
+
+
     tipos_classificacao = attribute_matrix[-1][1]
 
     dict_sizes = {}
@@ -13,7 +15,7 @@ def compute_data_set_entropy(validation_data, attribute_matrix):
         dict_sizes[opcao] = 0
 
     for v in validation_data:
-        atributo_interesse = v[list(v.keys())[-1]]
+        atributo_interesse = v["Class"]
         dict_sizes[atributo_interesse] = dict_sizes[atributo_interesse] + 1
 
 
@@ -35,7 +37,7 @@ def compute_data_set_entropy(validation_data, attribute_matrix):
 
 def compute_sub_set_entropy(validation_data, attribute, example, attribute_matrix):
 
-    tipos_classificacao = attribute_matrix[-1][1]
+    tipos_classificacao = Util.retorna_opcoes_classe(attribute_matrix)
 
     sizes = [0.0] + [0.0] * len(tipos_classificacao)
     set_sizes(validation_data, attribute, example, sizes, tipos_classificacao)
@@ -71,7 +73,7 @@ def set_sizes(validation_data, attribute, example, sizes, tipos_classificacao):
                 average = float(splitString[1])
                 if x < average:
                     sizes[0] += 1  # quantidade de registros
-                    classificacao_registro_atual = v[list(v.keys())[-1]]
+                    classificacao_registro_atual = v["Class"]
                     set_secondary_sizes(tipos_classificacao, classificacao_registro_atual, sizes)
 
             if ">" in example:
@@ -79,13 +81,13 @@ def set_sizes(validation_data, attribute, example, sizes, tipos_classificacao):
                 average = float(splitString[1])
                 if x > average:
                     sizes[0] += 1  # quantidade de registros
-                    classificacao_registro_atual = v[list(v.keys())[-1]]
+                    classificacao_registro_atual = v["Class"]
                     set_secondary_sizes(tipos_classificacao, classificacao_registro_atual, sizes)
 
         except ValueError:
             if present_attribute == example:
                 sizes[0] += 1 # quantidade de registros
-                classificacao_registro_atual = v[list(v.keys())[-1]]
+                classificacao_registro_atual = v["Class"]
                 set_secondary_sizes(tipos_classificacao, classificacao_registro_atual, sizes)
 
 def set_secondary_sizes(tipos_classificacao, classificacao_registro_atual, sizes):
@@ -95,7 +97,9 @@ def set_secondary_sizes(tipos_classificacao, classificacao_registro_atual, sizes
             sizes[posicao] += 1
 
 def is_pure_partition(validation_data, attribute, example, attribute_matrix):
-    tipos_classificacao = attribute_matrix[-1][1]
+
+    tipos_classificacao = Util.retorna_opcoes_classe(attribute_matrix)
+
     sizes = [0.0] + [0.0] * len(tipos_classificacao)
     set_sizes(validation_data, attribute, example, sizes, tipos_classificacao)
 

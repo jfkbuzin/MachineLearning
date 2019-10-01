@@ -1,6 +1,13 @@
 import math
 import numpy as np
 
+def retorna_opcoes_classe(attribute_matrix):
+    for atributo in attribute_matrix:
+        if atributo[0] == "Class":
+            tipos_classificacao = atributo[1]
+            break
+    return tipos_classificacao
+
 def log2(x):
     return math.log(x) / math.log(2)
 

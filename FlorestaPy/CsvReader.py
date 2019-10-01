@@ -2,8 +2,8 @@ import csv
 from collections import OrderedDict
 import ValidationData as vd
 
-def read_csv():
-    with open('dadosBenchmark_validacaoAlgoritmoAD.csv') as csvDataFile:
+def read_csv(arquivo):
+    with open(arquivo) as csvDataFile:
         validation_data = []
         csvReader = csv.reader(csvDataFile)
         cont = 0
@@ -11,7 +11,10 @@ def read_csv():
         for row in csvReader:
             if cont == 0:
                 for i in range(len(row)):
-                    attribute_matrix.append([row[i], []])
+                    if row[i] == "Joga" or row[i] == "class":
+                        attribute_matrix.append(["Class", []])
+                    else:
+                        attribute_matrix.append([row[i], []])
                 cont+=1
                 continue
             dado_atual = OrderedDict()
@@ -29,9 +32,21 @@ def read_csv():
             try:
                 x = float(attribute[1][0])
                 attribute[1] = ["NUMERICO"]
+
             except ValueError:
                 continue
-       # print(attribute_matrix)
+
+        if arquivo == "dataset_31_credit-g.csv":
+            attribute_matrix[-1][1] = ["good", "bad"]
+        elif arquivo == "dataset_191_wine-1.csv":
+            attribute_matrix[0][1] = ["1", "2", "3"]
+        elif arquivo == "vertebra.csv":
+            attribute_matrix[-1][1] = ["1", "2", "3"]
+        else:
+            attribute_matrix[-1][1] = ["Sim", "Nao"]
+
+        print(attribute_matrix)
+
         return validation_data, attribute_matrix
 
 def read_csv_numeral():
