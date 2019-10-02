@@ -91,7 +91,7 @@ def update_matrix_paths(attribute_matrix, validation_data):
 
                 length = len(validation_data)
                 average = sum / length
-                attribute[1] = ["< " + str(round(average, 3)), "> " + str(round(average, 3))]
+                attribute[1] = ["@< " + str(round(average, 3)), "@> " + str(round(average, 3))]
         except ValueError:
             continue
 
@@ -154,13 +154,13 @@ def sub_data(decision_tree, path, validation_data, attribute_matrix):
     for v in validation_data:
         try:
             x = float(v[attribute])
-            if "<" in path:
+            if "<" in path and "@" in path:
                 splitString = path.split('< ')
                 average = float(splitString[1])
                 if x < average:
                     new_validation_data.append(v)
 
-            if ">" in path:
+            if ">" in path and "@" in path:
                 splitString = path.split('> ')
                 average = float(splitString[1])
                 if x > average:
@@ -178,13 +178,13 @@ def select_leaf_id(decision_tree, path, validation_data):
     for v in validation_data:
         try:
             x = float(v[attribute])
-            if "<" in path:
+            if "<" in path and '@' in path:
                 splitString = path.split('< ')
                 average = float(splitString[1])
                 if x < average:
                     return v["Class"]
 
-            if ">" in path:
+            if ">" in path and '@' in path:
                 splitString = path.split('> ')
                 average = float(splitString[1])
                 if x > average:
@@ -195,6 +195,9 @@ def select_leaf_id(decision_tree, path, validation_data):
 
 # print tree
 def print_tree(decision_tree):
+    if decision_tree is None or decision_tree.node_id is None or decision_tree.gain is None:
+        return
+
     string = "node id:" + decision_tree.node_id + ", node gain:" + str(decision_tree.gain)
     i = 0
 
@@ -221,13 +224,13 @@ def evaluateData(validation_data, decision_tree):
 
             try:
                 x = float(validation_data[attribute])
-                if "<" in path:
+                if "<" in path and '@' in path:
                     splitString = path.split('< ')
                     average = float(splitString[1])
                     if x < average:
                         return evaluateData(validation_data, decision_tree.branches[i])
 
-                if ">" in path:
+                if ">" in path and '@' in path:
                     splitString = path.split('> ')
                     average = float(splitString[1])
                     if x > average:

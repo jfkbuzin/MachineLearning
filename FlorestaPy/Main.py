@@ -28,14 +28,15 @@ def bootstrap_tree(validation_data,fixedSeed):
 
 # uncomment to test CrossValidation
 if __name__ == '__main__':
-    #arquivo = "dadosBenchmark_validacaoAlgoritmoAD.csv"
+
     #validation_data, attribute_matrix = CsvReader.read_csv(arquivo)
     #decision_tree = full_tree(validation_data, attribute_matrix)
 
+    arquivo = "dadosBenchmark_validacaoAlgoritmoAD.csv"
     #arquivo = "vertebra.csv"
     #arquivo = "dataset_191_wine-1.csv"
-    arquivo = "dataset_31_credit-g.csv"
-    vertebra_data, attribute_matrix_vertebra = CsvReader.read_csv(arquivo)
-    vertebra_decision_tree = full_tree(vertebra_data, attribute_matrix_vertebra)
+    #arquivo = "dataset_31_credit-g.csv"
+    data, attribute_matrix = CsvReader.read_csv(arquivo)
+    decision_tree = full_tree(data, attribute_matrix)
 
-    #cs.run(validation_data, attribute_matrix)
+    cs.run(data, attribute_matrix)

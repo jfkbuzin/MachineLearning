@@ -17,10 +17,11 @@ def generateTestSet(validation_data, K, i):
     return test_set
 
 def run(validation_data, attribute_matrix):
-    ntree = 5
+    ntree = 20
     fixedSeed = 0
     seed = 7
     K = 5
+
 
     for i in range(K):
         forest = []

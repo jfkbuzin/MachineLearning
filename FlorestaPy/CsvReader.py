@@ -50,7 +50,7 @@ def read_csv(arquivo):
 
                     length = len(validation_data)
                     average = sum / length
-                    attribute[1] = ["< " + str(round(average,3)), "> " + str(round(average,3))]
+                    attribute[1] = ["@< " + str(round(average,3)), "@> " + str(round(average,3))]
                 except ValueError:
                     continue
 
