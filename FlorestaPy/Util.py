@@ -12,6 +12,13 @@ def get_classes(attribute_matrix):
 def log2(x):
     return math.log(x) / math.log(2)
 
+def get_class_attribute_index(attribute_matrix):
+    cont = 0
+    for att in attribute_matrix:
+        if att[0] == "Class":
+            return cont
+        cont += 1
+
 def get_m(attribute_matrix):
     size = len(attribute_matrix) - 1
     return math.sqrt(size)

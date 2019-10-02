@@ -2,7 +2,6 @@ from operator import attrgetter
 import ValidationData
 import Util
 
-
 class AttributeGain:
 
     def __init__(self, attribute, gain):
@@ -28,9 +27,10 @@ class DecisionTree:
 def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
     gain_list = []
     data_set_entropy = ValidationData.compute_data_set_entropy(validation_data, attribute_matrix)
+    class_index = Util.get_class_attribute_index(attribute_matrix)
 
     for attribute_line in attribute_matrix:
-        if attribute_matrix.index(attribute_line) != len(attribute_matrix) - 1:
+        if attribute_matrix.index(attribute_line) != class_index:
             if attribute_line[0] not in classes:
                 entropy_average = 0
                 for option in attribute_line[1]:
@@ -49,25 +49,10 @@ def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
 
     #raise ValueError("Gain list is null")
     print("Gain list is null and all classes have been used, setting leaf as the most frequent value")
-    return setAttributeByFrequency(validation_data,attribute_matrix)
+    return set_attribute_by_frequency(validation_data,attribute_matrix)
 
 
-def setAttributeByFrequency(validation_data, attribute_matrix):
-    """
-    yes_size = 0
-    no_size = 0
-
-    for v in validation_data:
-        if v["Joga"] == "Sim":
-            yes_size += 1
-        else:
-            no_size += 1
-
-    if yes_size >= no_size:
-        return "Sim"
-    else:
-        return "Nao" """
-
+def set_attribute_by_frequency(validation_data, attribute_matrix):
     atributo_objetivo = "Class"
     opcoes_objetivo = Util.get_classes(attribute_matrix)
 
@@ -92,21 +77,37 @@ def setAttributeByFrequency(validation_data, attribute_matrix):
 
 def select_node_id(classes, decision_tree, validation_data, attribute_matrix):
     decision_tree.node_id = select_attribute(classes, decision_tree, validation_data, attribute_matrix)
+
+def update_matrix_paths(attribute_matrix, validation_data):
+    for attribute in attribute_matrix:
+        string1 = attribute[0]
+        try:
+            x = float(validation_data[0][string1])
+            class_index = Util.get_class_attribute_index(attribute_matrix)
+            if attribute_matrix.index(attribute) != class_index:
+                sum = 0
+                for v in validation_data:
+                    sum += float(v[string1])
+
+                length = len(validation_data)
+                average = sum / length
+                attribute[1] = ["< " + str(round(average, 3)), "> " + str(round(average, 3))]
+        except ValueError:
+            continue
+
 # 2. Estender a árvore, adicionando uma ramo para cada valor do atributo selecionado existente
-
-
 def add_branch(decision_tree, validation_data,attribute_matrix):
     paths = []
-
     attribute = decision_tree.node_id
 
     for v in validation_data:
         if attribute in v.keys(): # para evitar que tente encontrar paths pra folha
             try:
                 x = float(v[attribute])
+                class_index = Util.get_class_attribute_index(attribute_matrix)
                 while not paths:
                     for att in attribute_matrix:
-                        if attribute_matrix.index(att) != len(attribute_matrix) - 1:
+                        if attribute_matrix.index(att) != class_index:
                             if att[0] == attribute:
                                 print(att)
                                 paths.append(att[1][0])
@@ -119,15 +120,18 @@ def add_branch(decision_tree, validation_data,attribute_matrix):
 
 
 # 3. Dividir os exemplos em partições (uma para cada ramo adicionado), conforme valor do atributo testado
-
+# 4. Para cada partição de exemplos resultante, repetir passos 1 a 3
 def split_examples(classes, decision_tree, validation_data, attribute_matrix):
     branches = []
+
     for path in decision_tree.paths:
         new_validation_data = sub_data(decision_tree, path, validation_data, attribute_matrix)
-
         branch_decision_tree = DecisionTree()
 
         if len(new_validation_data) > 0:
+            new_attribute_matrix = attribute_matrix
+            update_matrix_paths(new_attribute_matrix, new_validation_data)
+
             select_node_id(classes, branch_decision_tree, new_validation_data, attribute_matrix)
             add_branch(branch_decision_tree, new_validation_data,attribute_matrix)
             branches.append(branch_decision_tree)
@@ -189,11 +193,8 @@ def select_leaf_id(decision_tree, path, validation_data):
             if v[attribute] == path:
                 return v["Class"]
 
-# 4. Para cada partição de exemplos resultante, repetir passos 1 a 3
-
 # print tree
 def print_tree(decision_tree):
-
     string = "node id:" + decision_tree.node_id + ", node gain:" + str(decision_tree.gain)
     i = 0
 
@@ -239,32 +240,6 @@ def evaluateData(validation_data, decision_tree):
             i = i + 1
 
 def majority_vote(validation_data, forest,attribute_matrix):
-
-    """
-    case = 1
-
-    for data in validation_data:
-        yes_size = 0
-        no_size = 0
-        for tree in forest:
-            string = evaluateData(data,tree)
-            if string == "Sim":
-                yes_size += 1
-
-            if string == "Nao":
-                no_size += 1
-
-        if yes_size > no_size:
-            print("Case:" + str(case) + " Majority vote is Sim, quantity:" + str(yes_size))
-
-        if no_size > yes_size:
-            print("Case:" + str(case) + " Majority vote is Nao, quantity:" + str(no_size))
-
-        if no_size == yes_size:
-            print("Case:" + str(case) + " Majority vote is inconclusive")
-
-        case += 1 """
-
     case = 1
 
     opcoes_objetivo = Util.get_classes(attribute_matrix)

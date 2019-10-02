@@ -21,7 +21,6 @@ def generateTrainingSet(validation_data,fixedSeed):
 
 #gerar lista com dados que não se encontram no conjunto de treinamento
 def generateTestSet(validation_data, training_set):
-
     test_set = []
     for reg in validation_data:
         if reg not in training_set:
