@@ -37,7 +37,7 @@ def compute_data_set_entropy(validation_data, attribute_matrix):
 
 def compute_sub_set_entropy(validation_data, attribute, example, attribute_matrix):
 
-    tipos_classificacao = Util.retorna_opcoes_classe(attribute_matrix)
+    tipos_classificacao = Util.get_classes(attribute_matrix)
 
     sizes = [0.0] + [0.0] * len(tipos_classificacao)
     set_sizes(validation_data, attribute, example, sizes, tipos_classificacao)
@@ -98,7 +98,7 @@ def set_secondary_sizes(tipos_classificacao, classificacao_registro_atual, sizes
 
 def is_pure_partition(validation_data, attribute, example, attribute_matrix):
 
-    tipos_classificacao = Util.retorna_opcoes_classe(attribute_matrix)
+    tipos_classificacao = Util.get_classes(attribute_matrix)
 
     sizes = [0.0] + [0.0] * len(tipos_classificacao)
     set_sizes(validation_data, attribute, example, sizes, tipos_classificacao)

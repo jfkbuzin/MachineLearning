@@ -69,7 +69,7 @@ def setAttributeByFrequency(validation_data, attribute_matrix):
         return "Nao" """
 
     atributo_objetivo = "Class"
-    opcoes_objetivo = Util.retorna_opcoes_classe(attribute_matrix)
+    opcoes_objetivo = Util.get_classes(attribute_matrix)
 
     dict_sizes = {}
     for opcao in opcoes_objetivo:
@@ -81,12 +81,12 @@ def setAttributeByFrequency(validation_data, attribute_matrix):
                 dict_sizes[opcao_atual] += 1
 
     str_maximo = ""
-    valor_maximo = 0
+    max_value = 0
 
     for opcao in opcoes_objetivo:
-        if dict_sizes[opcao] >= valor_maximo:
+        if dict_sizes[opcao] >= max_value:
             str_maximo = opcao
-            valor_maximo = dict_sizes[opcao]
+            max_value = dict_sizes[opcao]
 
     return str_maximo
 
@@ -267,7 +267,7 @@ def majority_vote(validation_data, forest,attribute_matrix):
 
     case = 1
 
-    opcoes_objetivo = Util.retorna_opcoes_classe(attribute_matrix)
+    opcoes_objetivo = Util.get_classes(attribute_matrix)
 
     for data in validation_data:
         dict_sizes = {}
@@ -282,24 +282,54 @@ def majority_vote(validation_data, forest,attribute_matrix):
                     dict_sizes[opcao_atual] += 1
 
             str_maximo = ""
-            valor_maximo = 0
+            max_value = 0
 
             for opcao in opcoes_objetivo:
-                if dict_sizes[opcao] >= valor_maximo:
+                if dict_sizes[opcao] >= max_value:
                     str_maximo = opcao
-                    valor_maximo = dict_sizes[opcao]
+                    max_value = dict_sizes[opcao]
 
-            conta_empate_maximo = 0
+            draw_count = 0
             for opcao in opcoes_objetivo:
-                if dict_sizes[opcao] == valor_maximo:
-                    conta_empate_maximo += 1
+                if dict_sizes[opcao] == max_value:
+                    draw_count += 1
 
-        if conta_empate_maximo != 1:
+        if draw_count != 1:
             print("Case:" + str(case) + " Majority vote is inconclusive")
         else:
-            print("Case:" + str(case) + " Majority vote is "+ str_maximo +", quantity:" + str(valor_maximo))
+            print("Case:" + str(case) + " Majority vote is "+ str_maximo +", quantity:" + str(max_value))
 
         case += 1
 
+def evaluateForest(test_case, forest, all_classes):
+    dict_sizes = {}
 
+    for Class in all_classes:
+        dict_sizes[Class] = 0
 
+    for tree in forest:
+        string = evaluateData(test_case, tree)
+
+        for Class_actual in all_classes:
+            if string == Class_actual:
+                dict_sizes[Class_actual] += 1
+
+        prediction = ""
+        max_value = 0
+
+        for Class in all_classes:
+            if dict_sizes[Class] >= max_value:
+                prediction = Class
+                max_value = dict_sizes[Class]
+
+        draw_count = 0
+        for Class in all_classes:
+            if dict_sizes[Class] == max_value:
+                draw_count += 1
+
+    if draw_count != 1:
+        print("Majority vote is inconclusive")
+        return None
+    else:
+        print("Majority vote is "+ prediction +", quantity: " + str(max_value))
+        return prediction

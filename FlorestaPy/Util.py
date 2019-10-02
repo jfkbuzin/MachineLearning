@@ -1,7 +1,8 @@
 import math
 import numpy as np
+import DecisionTree as dt
 
-def retorna_opcoes_classe(attribute_matrix):
+def get_classes(attribute_matrix):
     for atributo in attribute_matrix:
         if atributo[0] == "Class":
             tipos_classificacao = atributo[1]
@@ -33,11 +34,10 @@ def f1Score(precision, recall):
 # return example:
 # (0.833, 0.555, 0.666)
 def performance_binary(list_tuples, classes):
-    if len(classes) > 2:
+    if len(list_tuples) == 0 or len(classes) > 2:
         return 0, 0, 0
 
     confusion_matrix = np.zeros((len(classes), len(classes)), dtype=np.int32)
-
     for tup in list_tuples:
         truth_index = classes.index(tup[0])
         predicted_index = classes.index(tup[1])
@@ -100,3 +100,49 @@ def performance_multiclass(list_tuples, classes):
     performance_dict["macro"] = precision_sum/len(classes)
     performance_dict["micro"] = np.sum(VP) / (np.sum(VP) + np.sum(FP))
     return performance_dict
+
+def evaluateTree(decisionTree, test_set, all_classes):
+    print("Evaluating Tree")
+    list_tuples = []
+    for t in range(len(test_set)):
+        string = dt.evaluateData(test_set[t], decisionTree)
+        if string is None:
+            print("test #" + str(t) + " result: Unable to evaluate data, too much repetition on training set")
+        else:
+            print("test #" + str(t) + " result: " + "(Verdadeiro / Classificado) (" + test_set[t]["Class"] + " / " + string + ")")
+            tup = (test_set[t]["Class"], string)
+            list_tuples.append(tup)
+    
+    if len(all_classes) == 2:
+        precision, recall, f1 = performance_binary(list_tuples, all_classes)
+        print("performance_binary:")
+        print("precision:", str(precision))
+        print("recall:", str(recall))
+        print("f1:", str(f1))
+    else:
+        perf = performance_multiclass(list_tuples, all_classes)
+        print("performance_multiclass:")
+        print(perf)
+
+def evaluateForest(forest, test_set, all_classes):
+    print("Evaluating Forest")
+    list_tuples = []
+    for t in range(len(test_set)):
+        string = dt.evaluateForest(test_set[t], forest, all_classes)
+        if string is None:
+            print("test #" + str(t) + " result: Unable to evaluate data, too much repetition on training set")
+        else:
+            print("test #" + str(t) + " result: " + "(Verdadeiro / Classificado) (" + test_set[t]["Class"] + " / " + string + ")")
+            tup = (test_set[t]["Class"], string)
+            list_tuples.append(tup)
+    
+    if len(all_classes) == 2:
+        precision, recall, f1 = performance_binary(list_tuples, all_classes)
+        print("performance_binary:")
+        print("precision:", str(precision))
+        print("recall:", str(recall))
+        print("f1:", str(f1))
+    else:
+        perf = performance_multiclass(list_tuples, all_classes)
+        print("performance_multiclass:")
+        print(perf)
