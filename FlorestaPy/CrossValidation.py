@@ -41,8 +41,8 @@ def run(validation_data, attribute_matrix):
             classes = []
 
             # m attributes are used
-            #reduced_matrix = attribute_matrix
-            reduced_matrix = vd.select_m_attributes(attribute_matrix, seed)
+            reduced_matrix = attribute_matrix
+            #reduced_matrix = vd.select_m_attributes(attribute_matrix, seed)
             seed += len(validation_data)
 
             dt.select_node_id(classes, decisionTree, training_set, reduced_matrix)

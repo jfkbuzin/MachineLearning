@@ -29,7 +29,10 @@ def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
     data_set_entropy = ValidationData.compute_data_set_entropy(validation_data, attribute_matrix)
     class_index = Util.get_class_attribute_index(attribute_matrix)
 
-    for attribute_line in attribute_matrix:
+
+    reduced_matrix = ValidationData.select_m_attributes(attribute_matrix)
+
+    for attribute_line in reduced_matrix:
         if attribute_matrix.index(attribute_line) != class_index:
             if attribute_line[0] not in classes:
                 entropy_average = 0

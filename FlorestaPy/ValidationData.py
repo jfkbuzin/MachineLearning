@@ -102,17 +102,18 @@ def is_pure_partition(validation_data, attribute, example, attribute_matrix):
         return False
 
 
-def select_m_attributes(attribute_matrix,seed):
+def select_m_attributes(attribute_matrix):
     m_attribute_matrix = []
     m_attributes = []
     m = Util.get_m(attribute_matrix)
     class_index = Util.get_class_attribute_index(attribute_matrix)
 
     while m > 0:
-        random.seed(seed)
-        seed += 1
+        #random.seed(seed)
+        #seed += 1
         x = random.randint(0, len(attribute_matrix) - 2)
         if(x != class_index):
+
             if x in m_attributes:
                 continue
             else:
