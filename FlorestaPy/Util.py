@@ -147,19 +147,22 @@ def evaluateForest(forest, test_set, all_classes):
         if string is None:
             print("test #" + str(t) + " result: Unable to evaluate data, too much repetition on training set")
         else:
-            print("test #" + str(t) + " result: " + "(Verdadeiro / Classificado) (" + test_set[t]["Class"] + " / " + string + ")")
+           # print("test #" + str(t) + " result: " + "(Verdadeiro / Classificado) (" + test_set[t]["Class"] + " / " + string + ")")
             tup = (test_set[t]["Class"], string)
             list_tuples.append(tup)
 
-    bad = 0
-    good = 0
-    for t in list_tuples:
-        if t[1] == 'good':
-             good += 1
-        else:
-             bad += 1
+    pesos = {}
+    str_resultado = "Votos :"
+    for opcao in all_classes:
+        pesos[opcao] = 0
+        for t in list_tuples:
+            if t[1] == opcao:
+                pesos[opcao] +=1
+        str_resultado += " | " + opcao + ": " + str(pesos[opcao])
 
-    print('Votos: good = ' + str(good) + ' bad = ' + str(bad))
+
+    print(str_resultado)
+    print("************************************************************************")
     if len(all_classes) == 2:
         precision, recall, f1 = performance_binary(list_tuples, all_classes)
         print("performance_binary:")
