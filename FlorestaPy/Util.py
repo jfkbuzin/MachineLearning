@@ -24,13 +24,21 @@ def get_m(attribute_matrix):
     return math.sqrt(size)
 
 def prec(vp, fp):
-    return  vp / (vp + fp)
+    if vp + fp != 0:
+        return  vp / (vp + fp)
+    else:
+        return 0.0
 
 def rev(vp, fn):
-    return  vp / (vp + fn)
+    if vp + fn != 0:
+        return  vp / (vp + fn)
+    else:
+        return 0.0
 
 def f1Score(precision, recall):
     beta = 1
+    if precision == 0.0 and recall == 0.0:
+        return 0.0
     return (1 + beta**2) * ((precision * recall) / ((beta**2 * precision) + recall))
 
 # performance_binary: compute the performance of predictions
