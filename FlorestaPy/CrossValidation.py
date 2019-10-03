@@ -48,14 +48,15 @@ def run(data, attribute_matrix):
             classes = []
 
             # m attributes are used
-            reduced_matrix = vd.select_m_attributes(attribute_matrix, seed)
+            reduced_matrix = vd.select_m_attributes(attribute_matrix)
             seed += len(data)
 
             dt.select_node_id(classes, decisionTree, training_set, reduced_matrix)
             dt.add_branch(decisionTree, training_set,reduced_matrix)
             dt.split_examples(classes, decisionTree, training_set, reduced_matrix)
 
-            print("root attribute selected:" + decisionTree.node_id)
+
+            #print("root attribute selected:" + decisionTree.node_id)
 
             # dt.print_tree(decisionTree)
             forest.append(decisionTree)

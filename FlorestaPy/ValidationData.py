@@ -26,7 +26,7 @@ def compute_data_set_entropy(validation_data, attribute_matrix):
 
     #info = -d1 * Util.log2(d1) - d2 * Util.log2(d2)
 
-    print("data set info: " + str(info))
+   # print("data set info: " + str(info))
     return info
 
 
@@ -41,7 +41,7 @@ def compute_sub_set_entropy(validation_data, attribute, example, attribute_matri
             d1 = sizes[i] / sizes[0]
             info = info - d1 * Util.log2(d1)
 
-    print("subset info: " + str(info))
+    #print("subset info: " + str(info))
     # passar já o valor para calcular a média
     if sizes[0] > 0:
         return (sizes[0] / len(validation_data)) * info
@@ -102,17 +102,18 @@ def is_pure_partition(validation_data, attribute, example, attribute_matrix):
         return False
 
 
-def select_m_attributes(attribute_matrix,seed):
+def select_m_attributes(attribute_matrix):
     m_attribute_matrix = []
     m_attributes = []
     m = Util.get_m(attribute_matrix)
     class_index = Util.get_class_attribute_index(attribute_matrix)
 
     while m > 0:
-        random.seed(seed)
-        seed += 1
+        #random.seed(seed)
+        #seed += 1
         x = random.randint(0, len(attribute_matrix) - 2)
         if(x != class_index):
+
             if x in m_attributes:
                 continue
             else:

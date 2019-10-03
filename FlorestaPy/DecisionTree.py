@@ -29,7 +29,10 @@ def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
     data_set_entropy = ValidationData.compute_data_set_entropy(validation_data, attribute_matrix)
     class_index = Util.get_class_attribute_index(attribute_matrix)
 
-    for attribute_line in attribute_matrix:
+
+    reduced_matrix = ValidationData.select_m_attributes(attribute_matrix)
+
+    for attribute_line in reduced_matrix:
         if attribute_matrix.index(attribute_line) != class_index:
             if attribute_line[0] not in classes:
                 entropy_average = 0
@@ -42,13 +45,13 @@ def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
         selected = max(gain_list, key=attrgetter('gain'))
         decision_tree.gain = selected.gain
 
-        print("Max Gain: " + str(decision_tree.gain))
+       # print("Max Gain: " + str(decision_tree.gain))
 
         classes.append(selected.attribute)
         return selected.attribute
 
     #raise ValueError("Gain list is null")
-    print("Gain list is null and all classes have been used, setting leaf as the most frequent value")
+    #print("Gain list is null and all classes have been used, setting leaf as the most frequent value")
     return set_attribute_by_frequency(validation_data,attribute_matrix)
 
 
@@ -109,7 +112,6 @@ def add_branch(decision_tree, validation_data,attribute_matrix):
                     for att in attribute_matrix:
                         if attribute_matrix.index(att) != class_index:
                             if att[0] == attribute:
-                                print(att)
                                 paths.append(att[1][0])
                                 paths.append(att[1][1])
             except ValueError:
