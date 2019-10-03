@@ -17,7 +17,7 @@ def full_tree(validation_data, attribute_matrix):
 
     print("root attribute selected:" + fullDecisionTree.node_id)
 
-    dt.print_tree(fullDecisionTree)
+#    dt.print_tree(fullDecisionTree)
 
     return fullDecisionTree
 
@@ -32,10 +32,10 @@ if __name__ == '__main__':
     #validation_data, attribute_matrix = CsvReader.read_csv(arquivo)
     #decision_tree = full_tree(validation_data, attribute_matrix)
 
-    arquivo = "dadosBenchmark_validacaoAlgoritmoAD.csv"
+    #arquivo = "dadosBenchmark_validacaoAlgoritmoAD.csv"
     #arquivo = "vertebra.csv"
     #arquivo = "dataset_191_wine-1.csv"
-    #arquivo = "dataset_31_credit-g.csv"
+    arquivo = "dataset_31_credit-g.csv"
     data, attribute_matrix = CsvReader.read_csv(arquivo)
     decision_tree = full_tree(data, attribute_matrix)
 

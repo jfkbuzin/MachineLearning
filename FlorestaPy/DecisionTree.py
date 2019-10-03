@@ -42,13 +42,13 @@ def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
         selected = max(gain_list, key=attrgetter('gain'))
         decision_tree.gain = selected.gain
 
-        print("Max Gain: " + str(decision_tree.gain))
+       # print("Max Gain: " + str(decision_tree.gain))
 
         classes.append(selected.attribute)
         return selected.attribute
 
     #raise ValueError("Gain list is null")
-    print("Gain list is null and all classes have been used, setting leaf as the most frequent value")
+    #print("Gain list is null and all classes have been used, setting leaf as the most frequent value")
     return set_attribute_by_frequency(validation_data,attribute_matrix)
 
 
@@ -109,7 +109,6 @@ def add_branch(decision_tree, validation_data,attribute_matrix):
                     for att in attribute_matrix:
                         if attribute_matrix.index(att) != class_index:
                             if att[0] == attribute:
-                                print(att)
                                 paths.append(att[1][0])
                                 paths.append(att[1][1])
             except ValueError:

@@ -54,6 +54,6 @@ def read_csv(arquivo):
                 except ValueError:
                     continue
 
-        print(attribute_matrix)
+       # print(attribute_matrix)
 
         return validation_data, attribute_matrix

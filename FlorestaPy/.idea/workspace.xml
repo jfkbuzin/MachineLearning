@@ -7,6 +7,7 @@
       <change beforePath="$PROJECT_DIR$/CsvReader.py" beforeDir="false" afterPath="$PROJECT_DIR$/CsvReader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DecisionTree.py" beforeDir="false" afterPath="$PROJECT_DIR$/DecisionTree.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Util.py" beforeDir="false" afterPath="$PROJECT_DIR$/Util.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ValidationData.py" beforeDir="false" afterPath="$PROJECT_DIR$/ValidationData.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -101,5 +102,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/DecisionTree.py</url>
+          <line>206</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

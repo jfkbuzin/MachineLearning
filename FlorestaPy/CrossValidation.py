@@ -17,8 +17,8 @@ def generateTestSet(validation_data, K, i):
     return test_set
 
 def run(validation_data, attribute_matrix):
-    ntree = 20
-    fixedSeed = 0
+    ntree = 100
+    fixedSeed = 2
     seed = 7
     K = 5
 
@@ -37,9 +37,11 @@ def run(validation_data, attribute_matrix):
             fixedSeed += len(validation_data)
 
             decisionTree = dt.DecisionTree()
+            #dt.print_tree(decisionTree)
             classes = []
 
             # m attributes are used
+            #reduced_matrix = attribute_matrix
             reduced_matrix = vd.select_m_attributes(attribute_matrix, seed)
             seed += len(validation_data)
 
@@ -47,13 +49,14 @@ def run(validation_data, attribute_matrix):
             dt.add_branch(decisionTree, training_set,reduced_matrix)
             dt.split_examples(classes, decisionTree, training_set, reduced_matrix)
 
-            print("root attribute selected:" + decisionTree.node_id)
+
+            #print("root attribute selected:" + decisionTree.node_id)
 
             # dt.print_tree(decisionTree)
             forest.append(decisionTree)
 
             all_classes = ut.get_classes(attribute_matrix)
-            ut.evaluateTree(decisionTree, test_set, all_classes)
+            #ut.evaluateTree(decisionTree, test_set, all_classes)
 
         # dt.majority_vote(validation_data, forest, attribute_matrix)
         ut.evaluateForest(forest, evaluation, all_classes)
