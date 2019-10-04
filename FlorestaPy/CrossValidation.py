@@ -58,7 +58,7 @@ def run(data, attribute_matrix):
 
             #print("root attribute selected:" + decisionTree.node_id)
 
-            # dt.print_tree(decisionTree)
+            #dt.print_tree(decisionTree)
             forest.append(decisionTree)
 
             all_classes = ut.get_classes(attribute_matrix)

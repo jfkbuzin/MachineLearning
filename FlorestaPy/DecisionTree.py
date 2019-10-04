@@ -50,7 +50,6 @@ def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
         classes.append(selected.attribute)
         return selected.attribute
 
-    #raise ValueError("Gain list is null")
     #print("Gain list is null and all classes have been used, setting leaf as the most frequent value")
     return set_attribute_by_frequency(validation_data,attribute_matrix)
 
@@ -134,10 +133,10 @@ def split_examples(classes, decision_tree, validation_data, attribute_matrix):
             new_attribute_matrix = attribute_matrix
             update_matrix_paths(new_attribute_matrix, new_validation_data)
 
-            select_node_id(classes, branch_decision_tree, new_validation_data, attribute_matrix)
-            add_branch(branch_decision_tree, new_validation_data,attribute_matrix)
+            select_node_id(classes, branch_decision_tree, new_validation_data, new_attribute_matrix)
+            add_branch(branch_decision_tree, new_validation_data,new_attribute_matrix)
             branches.append(branch_decision_tree)
-            split_examples(classes, branch_decision_tree, new_validation_data,attribute_matrix)
+            split_examples(classes, branch_decision_tree, new_validation_data,new_attribute_matrix)
 
         else:
             branch_decision_tree.node_id = select_leaf_id(decision_tree, path, validation_data)
