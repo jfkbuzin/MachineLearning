@@ -9,13 +9,9 @@ from collections import OrderedDict
 def full_tree(validation_data, attribute_matrix):
     fullDecisionTree = dt.DecisionTree()
 
-    classes = []
-
-    reduced_matrix = vd.select_m_attributes(attribute_matrix)
-
-    dt.select_node_id(classes, fullDecisionTree, validation_data, reduced_matrix)
-    dt.add_branch(fullDecisionTree, validation_data, reduced_matrix)
-    dt.split_examples(classes, fullDecisionTree, validation_data, reduced_matrix)
+    dt.select_node_id(fullDecisionTree, validation_data, attribute_matrix)
+    dt.add_branch(fullDecisionTree, validation_data, attribute_matrix)
+    dt.split_examples(fullDecisionTree, validation_data, attribute_matrix)
 
     print("root attribute selected:" + fullDecisionTree.node_id)
 

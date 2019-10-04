@@ -45,15 +45,14 @@ def run(data, attribute_matrix):
             fixedSeed += len(data)
 
             decisionTree = dt.DecisionTree()
-            classes = []
 
             # m attributes are used
-            reduced_matrix = vd.select_m_attributes(attribute_matrix)
+            #reduced_matrix = vd.select_m_attributes(attribute_matrix), this is being done on the select_node_id function
             seed += len(data)
 
-            dt.select_node_id(classes, decisionTree, training_set, reduced_matrix)
-            dt.add_branch(decisionTree, training_set,reduced_matrix)
-            dt.split_examples(classes, decisionTree, training_set, reduced_matrix)
+            dt.select_node_id(decisionTree, training_set, attribute_matrix)
+            dt.add_branch(decisionTree, training_set,attribute_matrix)
+            dt.split_examples(decisionTree, training_set, attribute_matrix)
 
 
             #print("root attribute selected:" + decisionTree.node_id)

@@ -24,22 +24,21 @@ class DecisionTree:
         self.branches = []
 
 
-def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
+def select_attribute(decision_tree, validation_data, attribute_matrix):
     gain_list = []
     data_set_entropy = ValidationData.compute_data_set_entropy(validation_data, attribute_matrix)
     class_index = Util.get_class_attribute_index(attribute_matrix)
-
 
     reduced_matrix = ValidationData.select_m_attributes(attribute_matrix)
 
     for attribute_line in reduced_matrix:
         if attribute_matrix.index(attribute_line) != class_index:
-            if attribute_line[0] not in classes:
-                entropy_average = 0
-                for option in attribute_line[1]:
-                    entropy_average += ValidationData.compute_sub_set_entropy(validation_data, attribute_line[0], option, attribute_matrix)
-                att = AttributeGain(attribute_line[0], (data_set_entropy - entropy_average))
-                gain_list.append(att)
+            #if attribute_line[0] not in classes:
+            entropy_average = 0
+            for option in attribute_line[1]:
+                entropy_average += ValidationData.compute_sub_set_entropy(validation_data, attribute_line[0], option, attribute_matrix)
+            att = AttributeGain(attribute_line[0], (data_set_entropy - entropy_average))
+            gain_list.append(att)
 
     if gain_list:
         selected = max(gain_list, key=attrgetter('gain'))
@@ -47,7 +46,7 @@ def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
 
        # print("Max Gain: " + str(decision_tree.gain))
 
-        classes.append(selected.attribute)
+        #classes.append(selected.attribute)
         return selected.attribute
 
     #print("Gain list is null and all classes have been used, setting leaf as the most frequent value")
@@ -57,6 +56,9 @@ def select_attribute(classes, decision_tree, validation_data, attribute_matrix):
 def set_attribute_by_frequency(validation_data, attribute_matrix):
     atributo_objetivo = "Class"
     opcoes_objetivo = Util.get_classes(attribute_matrix)
+
+    if not validation_data:
+        print("Empty partition")
 
     dict_sizes = {}
     for opcao in opcoes_objetivo:
@@ -77,8 +79,8 @@ def set_attribute_by_frequency(validation_data, attribute_matrix):
 
     return str_maximo
 
-def select_node_id(classes, decision_tree, validation_data, attribute_matrix):
-    decision_tree.node_id = select_attribute(classes, decision_tree, validation_data, attribute_matrix)
+def select_node_id(decision_tree, validation_data, attribute_matrix):
+    decision_tree.node_id = select_attribute(decision_tree, validation_data, attribute_matrix)
 
 def update_matrix_paths(attribute_matrix, validation_data):
     for attribute in attribute_matrix:
@@ -122,7 +124,7 @@ def add_branch(decision_tree, validation_data,attribute_matrix):
 
 # 3. Dividir os exemplos em partições (uma para cada ramo adicionado), conforme valor do atributo testado
 # 4. Para cada partição de exemplos resultante, repetir passos 1 a 3
-def split_examples(classes, decision_tree, validation_data, attribute_matrix):
+def split_examples(decision_tree, validation_data, attribute_matrix):
     branches = []
 
     for path in decision_tree.paths:
@@ -133,10 +135,10 @@ def split_examples(classes, decision_tree, validation_data, attribute_matrix):
             new_attribute_matrix = attribute_matrix
             update_matrix_paths(new_attribute_matrix, new_validation_data)
 
-            select_node_id(classes, branch_decision_tree, new_validation_data, new_attribute_matrix)
+            select_node_id(branch_decision_tree, new_validation_data, new_attribute_matrix)
             add_branch(branch_decision_tree, new_validation_data,new_attribute_matrix)
             branches.append(branch_decision_tree)
-            split_examples(classes, branch_decision_tree, new_validation_data,new_attribute_matrix)
+            split_examples(branch_decision_tree, new_validation_data,new_attribute_matrix)
 
         else:
             branch_decision_tree.node_id = select_leaf_id(decision_tree, path, validation_data)
