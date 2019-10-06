@@ -68,7 +68,7 @@ def set_sizes(validation_data, attribute, example, sizes, tipos_classificacao):
             if ">" in example and '@' in example:
                 splitString = example.split('> ')
                 average = float(splitString[1])
-                if x > average:
+                if x >= average:
                     sizes[0] += 1  # quantidade de registros
                     classificacao_registro_atual = v["Class"]
                     set_secondary_sizes(tipos_classificacao, classificacao_registro_atual, sizes)

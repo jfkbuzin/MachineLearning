@@ -166,7 +166,7 @@ def sub_data(decision_tree, path, validation_data, attribute_matrix):
             if ">" in path and "@" in path:
                 splitString = path.split('> ')
                 average = float(splitString[1])
-                if x > average:
+                if x >= average:
                     new_validation_data.append(v)
         except ValueError:
             if v[attribute] == path:
@@ -190,7 +190,7 @@ def select_leaf_id(decision_tree, path, validation_data):
             if ">" in path and '@' in path:
                 splitString = path.split('> ')
                 average = float(splitString[1])
-                if x > average:
+                if x >= average:
                     return v["Class"]
         except ValueError:
             if v[attribute] == path:
@@ -236,7 +236,7 @@ def evaluateData(validation_data, decision_tree):
                 if ">" in path and '@' in path:
                     splitString = path.split('> ')
                     average = float(splitString[1])
-                    if x > average:
+                    if x >= average:
                         return evaluateData(validation_data, decision_tree.branches[i])
 
             except ValueError:
