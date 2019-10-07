@@ -309,8 +309,8 @@ def evaluateForest(test_case, forest, all_classes):
                 draw_count += 1
 
     if draw_count != 1:
-        print("Majority vote is inconclusive")
+        # print("Majority vote is inconclusive")
         return None
     else:
-        print("Majority vote is "+ prediction +", quantity: " + str(max_value))
+        # print("Majority vote is "+ prediction +", quantity: " + str(max_value))
         return prediction

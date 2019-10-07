@@ -24,12 +24,13 @@ def run(data, attribute_matrix):
     fixedSeed = 0
     seed = 7
     K = 5
+    stats = []
 
     partitions = generatePartitions(data, K)
 
     for i in range(K):
         forest = []
-        print("K = " + str(i))
+        print("Running K = " + str(i))
 
         # generate cross validation training (K-1) and evaluation (1) partitions
         training = []
@@ -63,4 +64,5 @@ def run(data, attribute_matrix):
             all_classes = ut.get_classes(attribute_matrix)
             #ut.evaluateTree(decisionTree, test_set, all_classes)
 
-        ut.evaluateForest(forest, evaluation, all_classes)
+        stats.append(ut.evaluateForest(forest, evaluation, all_classes))
+    ut.printStats(stats, all_classes)

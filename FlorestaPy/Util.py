@@ -140,12 +140,13 @@ def evaluateTree(decisionTree, test_set, all_classes):
         print(perf)
 
 def evaluateForest(forest, test_set, all_classes):
-    print("Evaluating Forest")
+    # print("Evaluating Forest")
     list_tuples = []
     for t in range(len(test_set)):
         string = dt.evaluateForest(test_set[t], forest, all_classes)
         if string is None:
-            print("test #" + str(t) + " result: Unable to evaluate data, too much repetition on training set")
+            pass
+            # print("test #" + str(t) + " result: Unable to evaluate data, too much repetition on training set")
         else:
            # print("test #" + str(t) + " result: " + "(Verdadeiro / Classificado) (" + test_set[t]["Class"] + " / " + string + ")")
             tup = (test_set[t]["Class"], string)
@@ -157,19 +158,61 @@ def evaluateForest(forest, test_set, all_classes):
         pesos[opcao] = 0
         for t in list_tuples:
             if t[1] == opcao:
-                pesos[opcao] +=1
+                pesos[opcao] += 1
         str_resultado += " | " + opcao + ": " + str(pesos[opcao])
 
 
-    print(str_resultado)
-    print("************************************************************************")
+    # print(str_resultado)
+    # print("************************************************************************")
     if len(all_classes) == 2:
         precision, recall, f1 = performance_binary(list_tuples, all_classes)
-        print("performance_binary:")
-        print("precision:", str(precision))
-        print("recall:", str(recall))
-        print("f1:", str(f1))
+        # print("performance_binary:")
+        # print("precision:", str(precision))
+        # print("recall:", str(recall))
+        # print("f1:", str(f1))
+        return {
+            "precision": precision,
+            "recall": recall,
+            "f1Score": f1,
+        }
     else:
         perf = performance_multiclass(list_tuples, all_classes)
-        print("performance_multiclass:")
-        print(perf)
+        # print("performance_multiclass:")
+        # print(perf)
+        return perf
+
+def printStats(stats, all_classes):
+    print("\nSTATISTICS")
+    if len(all_classes) <= 2:
+        f1s = []
+        for i in range(len(stats)):
+            print("K =", i)
+            print("precision =", stats[i]["precision"])
+            print("recall =", stats[i]["recall"])
+            print("F1 =", stats[i]["f1Score"])
+            f1s.append(stats[i]["f1Score"])
+            print("*******************************")
+        print("Summary")
+        print("F1 mean =", np.mean(f1s))
+        print("F1 std =", np.std(f1s))
+    else:
+        f1s = {}
+        for i in range(len(stats)):
+            print("K =", i)
+            for s in stats[i]:
+                if type(stats[i][s]) == dict:
+                    print("Class", s, "=", stats[i][s])
+                    if s in f1s:
+                        f1s[s].append(stats[i][s]["f1Score"])
+                    else:
+                        f1s[s] = [stats[i][s]["f1Score"]]
+                else:
+                    print(s, "=", stats[i][s])
+            print("*******************************")
+        print("Summary")
+        for c in f1s:
+            print("Class", c, "F1 mean =", np.mean(f1s[c]))
+            print("Class", c, "F1 std =", np.std(f1s[c]))
+        # print(f1s)
+
+                

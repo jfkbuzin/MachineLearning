@@ -30,7 +30,7 @@ if __name__ == '__main__':
     #decision_tree = full_tree(validation_data, attribute_matrix)
 
     arquivo = "dadosBenchmark_validacaoAlgoritmoAD.csv"
-    #arquivo = "vertebra.csv"
+    # arquivo = "vertebra.csv"
     #arquivo = "dataset_191_wine-1.csv"
     #arquivo = "dataset_31_credit-g.csv"
     data, attribute_matrix = CsvReader.read_csv(arquivo)
