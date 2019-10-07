@@ -1,6 +1,5 @@
 import csv
 from collections import OrderedDict
-import ValidationData as vd
 
 def read_csv(arquivo):
     with open(arquivo) as csvDataFile:
@@ -24,7 +23,6 @@ def read_csv(arquivo):
                 if row[i] not in attribute_matrix[i][1]:
                     attribute_matrix[i][1].append(row[i])
 
-          #  print(dado_atual)
             validation_data.append(dado_atual)
 
         target_attribute_index = len(attribute_matrix) - 1
@@ -53,7 +51,5 @@ def read_csv(arquivo):
                     attribute[1] = ["@< " + str(round(average,3)), "@> " + str(round(average,3))]
                 except ValueError:
                     continue
-
-        # print(attribute_matrix)
 
         return validation_data, attribute_matrix

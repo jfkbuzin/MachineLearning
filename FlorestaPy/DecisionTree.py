@@ -215,7 +215,7 @@ def print_tree(decision_tree):
 
 
 # predizer classe a partir do dado de entrada percorrendo a árvore
-def evaluateData(validation_data, decision_tree):
+def evaluate_data(validation_data, decision_tree):
     attribute = decision_tree.node_id
 
     #is leaf
@@ -231,65 +231,28 @@ def evaluateData(validation_data, decision_tree):
                     splitString = path.split('< ')
                     average = float(splitString[1])
                     if x < average:
-                        return evaluateData(validation_data, decision_tree.branches[i])
+                        return evaluate_data(validation_data, decision_tree.branches[i])
 
                 if ">" in path and '@' in path:
                     splitString = path.split('> ')
                     average = float(splitString[1])
                     if x >= average:
-                        return evaluateData(validation_data, decision_tree.branches[i])
+                        return evaluate_data(validation_data, decision_tree.branches[i])
 
             except ValueError:
                 if validation_data[attribute] == path:
-                    return evaluateData(validation_data, decision_tree.branches[i])
+                    return evaluate_data(validation_data, decision_tree.branches[i])
 
             i = i + 1
 
-def majority_vote(validation_data, forest,attribute_matrix):
-    case = 1
-
-    opcoes_objetivo = Util.get_classes(attribute_matrix)
-
-    for data in validation_data:
-        dict_sizes = {}
-        for opcao in opcoes_objetivo:
-            dict_sizes[opcao] = 0
-
-        for tree in forest:
-            string = evaluateData(data, tree)
-
-            for opcao_atual in opcoes_objetivo:
-                if string == opcao_atual:
-                    dict_sizes[opcao_atual] += 1
-
-            str_maximo = ""
-            max_value = 0
-
-            for opcao in opcoes_objetivo:
-                if dict_sizes[opcao] >= max_value:
-                    str_maximo = opcao
-                    max_value = dict_sizes[opcao]
-
-            draw_count = 0
-            for opcao in opcoes_objetivo:
-                if dict_sizes[opcao] == max_value:
-                    draw_count += 1
-
-        if draw_count != 1:
-            print("Case:" + str(case) + " Majority vote is inconclusive")
-        else:
-            print("Case:" + str(case) + " Majority vote is "+ str_maximo +", quantity:" + str(max_value))
-
-        case += 1
-
-def evaluateForest(test_case, forest, all_classes):
+def evaluate_forest(test_case, forest, all_classes):
     dict_sizes = {}
 
     for Class in all_classes:
         dict_sizes[Class] = 0
 
     for tree in forest:
-        string = evaluateData(test_case, tree)
+        string = evaluate_data(test_case, tree)
 
         for Class_actual in all_classes:
             if string == Class_actual:

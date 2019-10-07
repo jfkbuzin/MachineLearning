@@ -35,7 +35,7 @@ def rev(vp, fn):
     else:
         return 0.0
 
-def f1Score(precision, recall):
+def f1_score(precision, recall):
     beta = 1
     if precision == 0.0 and recall == 0.0:
         return 0.0
@@ -63,7 +63,7 @@ def performance_binary(list_tuples, classes):
     FN = confusion_matrix[0][1]
     precision = prec(VP, FP)
     recall = rev(VP, FN)
-    f = f1Score(precision, recall)
+    f = f1_score(precision, recall)
 
     return precision, recall, f
 
@@ -102,7 +102,7 @@ def performance_multiclass(list_tuples, classes):
                 FN[c] += confusion_matrix[c][i]
         precision = prec(VP[c], FP[c])
         recall = rev(VP[c], FN[c])
-        f = f1Score(precision, recall)
+        f = f1_score(precision, recall)
         performance_dict[classes[c]] = {
             "precision": precision,
             "recall": recall,
@@ -116,11 +116,11 @@ def performance_multiclass(list_tuples, classes):
     performance_dict["micro"] = np.sum(VP) / (np.sum(VP) + np.sum(FP))
     return performance_dict
 
-def evaluateTree(decisionTree, test_set, all_classes):
+def evaluate_tree(decisionTree, test_set, all_classes):
     print("Evaluating Tree")
     list_tuples = []
     for t in range(len(test_set)):
-        string = dt.evaluateData(test_set[t], decisionTree)
+        string = dt.evaluate_data(test_set[t], decisionTree)
         if string is None:
             print("test #" + str(t) + " result: Unable to evaluate data, too much repetition on training set")
         else:
@@ -139,16 +139,13 @@ def evaluateTree(decisionTree, test_set, all_classes):
         print("performance_multiclass:")
         print(perf)
 
-def evaluateForest(forest, test_set, all_classes):
-    # print("Evaluating Forest")
+def evaluate_forest(forest, test_set, all_classes):
     list_tuples = []
     for t in range(len(test_set)):
-        string = dt.evaluateForest(test_set[t], forest, all_classes)
+        string = dt.evaluate_forest(test_set[t], forest, all_classes)
         if string is None:
             pass
-            # print("test #" + str(t) + " result: Unable to evaluate data, too much repetition on training set")
         else:
-           # print("test #" + str(t) + " result: " + "(Verdadeiro / Classificado) (" + test_set[t]["Class"] + " / " + string + ")")
             tup = (test_set[t]["Class"], string)
             list_tuples.append(tup)
 
@@ -161,15 +158,8 @@ def evaluateForest(forest, test_set, all_classes):
                 pesos[opcao] += 1
         str_resultado += " | " + opcao + ": " + str(pesos[opcao])
 
-
-    # print(str_resultado)
-    # print("************************************************************************")
     if len(all_classes) == 2:
         precision, recall, f1 = performance_binary(list_tuples, all_classes)
-        # print("performance_binary:")
-        # print("precision:", str(precision))
-        # print("recall:", str(recall))
-        # print("f1:", str(f1))
         return {
             "precision": precision,
             "recall": recall,
@@ -177,11 +167,9 @@ def evaluateForest(forest, test_set, all_classes):
         }
     else:
         perf = performance_multiclass(list_tuples, all_classes)
-        # print("performance_multiclass:")
-        # print(perf)
         return perf
 
-def printStats(stats, all_classes):
+def print_stats(stats, all_classes):
     print("\nSTATISTICS")
     if len(all_classes) <= 2:
         f1s = []

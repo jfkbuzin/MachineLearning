@@ -1,12 +1,6 @@
-import ValidationData
 import random
-from collections import OrderedDict
 
 random.seed(a=1)
-
-def bootstrap(validation_data, training_set, test_set):
-    training_set = generateTrainingSet(validation_data)
-    test_set = generateTestSet(validation_data, training_set)
 
 #gerar conjunto de treinamento com reposição
 def generateTrainingSet(validation_data,fixedSeed):

@@ -1,5 +1,4 @@
 import Util
-import numpy as np
 import random
 
 def compute_data_set_entropy(validation_data, attribute_matrix):
@@ -29,7 +28,6 @@ def compute_data_set_entropy(validation_data, attribute_matrix):
    # print("data set info: " + str(info))
     return info
 
-
 def compute_sub_set_entropy(validation_data, attribute, example, attribute_matrix):
     tipos_classificacao = Util.get_classes(attribute_matrix)
     sizes = [0.0] + [0.0] * len(tipos_classificacao)
@@ -41,13 +39,11 @@ def compute_sub_set_entropy(validation_data, attribute, example, attribute_matri
             d1 = sizes[i] / sizes[0]
             info = info - d1 * Util.log2(d1)
 
-    #print("subset info: " + str(info))
     # passar já o valor para calcular a média
     if sizes[0] > 0:
         return (sizes[0] / len(validation_data)) * info
 
     return 0
-
 
 def set_sizes(validation_data, attribute, example, sizes, tipos_classificacao):
     present_attribute = None
@@ -101,7 +97,6 @@ def is_pure_partition(validation_data, attribute, example, attribute_matrix):
     else:
         return False
 
-
 def select_m_attributes(attribute_matrix):
     m_attribute_matrix = []
     m_attributes = []
@@ -109,8 +104,6 @@ def select_m_attributes(attribute_matrix):
     class_index = Util.get_class_attribute_index(attribute_matrix)
 
     while m > 0:
-        #random.seed(seed)
-        #seed += 1
         x = random.randint(0, len(attribute_matrix) - 2)
         if(x != class_index):
 

@@ -19,20 +19,13 @@ def full_tree(validation_data, attribute_matrix):
 
     return fullDecisionTree
 
-def bootstrap_tree(validation_data,fixedSeed):
-    training_set = bs.generateTrainingSet(validation_data, fixedSeed)
-    test_set = bs.generateTestSet(validation_data, training_set)
-    return  training_set, test_set
-
 # uncomment to test CrossValidation
 if __name__ == '__main__':
-    #validation_data, attribute_matrix = CsvReader.read_csv(arquivo)
-    #decision_tree = full_tree(validation_data, attribute_matrix)
-
-    arquivo = "dadosBenchmark_validacaoAlgoritmoAD.csv"
-    # arquivo = "vertebra.csv"
+    # arquivo = "dadosBenchmark_validacaoAlgoritmoAD.csv"
+    arquivo = "vertebra.csv"
     #arquivo = "dataset_191_wine-1.csv"
     #arquivo = "dataset_31_credit-g.csv"
+    
     data, attribute_matrix = CsvReader.read_csv(arquivo)
     #decision_tree = full_tree(data, attribute_matrix)
 

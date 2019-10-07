@@ -62,7 +62,7 @@ def run(data, attribute_matrix):
             forest.append(decisionTree)
 
             all_classes = ut.get_classes(attribute_matrix)
-            #ut.evaluateTree(decisionTree, test_set, all_classes)
+            #ut.evaluate_tree(decisionTree, test_set, all_classes)
 
-        stats.append(ut.evaluateForest(forest, evaluation, all_classes))
-    ut.printStats(stats, all_classes)
+        stats.append(ut.evaluate_forest(forest, evaluation, all_classes))
+    ut.print_stats(stats, all_classes)
