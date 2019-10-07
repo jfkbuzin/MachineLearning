@@ -23,7 +23,7 @@ def run(data, attribute_matrix):
     ntree = 20
     fixedSeed = 0
     seed = 7
-    K = 5
+    K = 10
     stats = []
 
     partitions = generate_partitions(data, K)
