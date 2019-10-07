@@ -5,7 +5,7 @@ import CrossValidation as cs
 import Util as ut
 from collections import OrderedDict
 
-def generatePartitions(data, K):
+def generate_partitions(data, K):
     partitions = []
     ordered_data = sorted(data.copy(), key=lambda k: k['Class'])
 
@@ -26,7 +26,7 @@ def run(data, attribute_matrix):
     K = 5
     stats = []
 
-    partitions = generatePartitions(data, K)
+    partitions = generate_partitions(data, K)
 
     for i in range(K):
         forest = []
