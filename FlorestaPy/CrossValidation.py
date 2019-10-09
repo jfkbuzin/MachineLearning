@@ -42,7 +42,7 @@ def run(data, attribute_matrix):
         # run bootstrap and create each decision tree of forest
         for t in range(ntree):
             training_set = bs.generate_training_set(training, fixedSeed)
-            test_set = bs.generate_test_set(training, training_set)
+            #test_set = bs.generate_test_set(training, training_set)
             fixedSeed += len(data)
 
             decisionTree = dt.DecisionTree()
@@ -51,9 +51,9 @@ def run(data, attribute_matrix):
             #reduced_matrix = vd.select_m_attributes(attribute_matrix), this is being done on the select_node_id function
             seed += len(data)
 
-            dt.select_node_id(decisionTree, training_set, attribute_matrix)
+            dt.select_node_id(decisionTree, training_set, attribute_matrix,False)
             dt.add_branch(decisionTree, training_set,attribute_matrix)
-            dt.split_examples(decisionTree, training_set, attribute_matrix)
+            dt.split_examples(decisionTree, training_set, attribute_matrix,False)
 
 
             #print("root attribute selected:" + decisionTree.node_id)
