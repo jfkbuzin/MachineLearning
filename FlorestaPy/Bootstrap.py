@@ -3,7 +3,7 @@ import random
 random.seed(a=1)
 
 #gerar conjunto de treinamento com reposição
-def generateTrainingSet(validation_data,fixedSeed):
+def generate_training_set(validation_data,fixedSeed):
     training_set = []
 
     for i in validation_data:
@@ -14,7 +14,7 @@ def generateTrainingSet(validation_data,fixedSeed):
     return training_set
 
 #gerar lista com dados que não se encontram no conjunto de treinamento
-def generateTestSet(validation_data, training_set):
+def generate_test_set(validation_data, training_set):
     test_set = []
     for reg in validation_data:
         if reg not in training_set:

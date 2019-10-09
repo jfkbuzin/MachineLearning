@@ -41,8 +41,8 @@ def run(data, attribute_matrix):
 
         # run bootstrap and create each decision tree of forest
         for t in range(ntree):
-            training_set = bs.generateTrainingSet(training, fixedSeed)
-            test_set = bs.generateTestSet(training, training_set)
+            training_set = bs.generate_training_set(training, fixedSeed)
+            test_set = bs.generate_test_set(training, training_set)
             fixedSeed += len(data)
 
             decisionTree = dt.DecisionTree()
